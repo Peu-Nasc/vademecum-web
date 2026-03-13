@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vade Mecum Digital | Acesso</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0f172a; --accent-color: #3b82f6; --bg-color: #f8fafc;
+            --surface-color: #ffffff; --text-main: #334155; --text-light: #64748b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+
+        /* --- TELA DE LOGIN --- */
+        #telaAuth { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, var(--primary-color) 0%, #1e293b 100%); }
+        .auth-card { background: var(--surface-color); padding: 3rem; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 100%; max-width: 400px; text-align: center; }
+        .auth-card h2 { color: var(--primary-color); margin-bottom: 0.5rem; font-size: 1.8rem; }
+        .auth-card p { color: var(--text-light); margin-bottom: 2rem; font-size: 0.9rem; }
+        .auth-form { display: flex; flex-direction: column; gap: 15px; }
+        .auth-form input { padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; width: 100%; }
+        .auth-form input:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        .auth-btn { background-color: var(--accent-color); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .auth-btn:hover { background-color: #2563eb; }
+        .auth-toggle { margin-top: 20px; color: var(--text-light); font-size: 0.9rem; }
+        .auth-toggle span { color: var(--accent-color); cursor: pointer; font-weight: bold; }
+        .auth-toggle span:hover { text-decoration: underline; }
+
+        /* --- DASHBOARD PRINCIPAL --- */
+        #telaApp { 
+            display: none; 
+            height: 100vh; 
+            width: 100vw; 
+            overflow: hidden; 
+            background-color: var(--bg-color);
+        }
+
+        /* BARRA LATERAL */
+        .sidebar { width: 280px; background-color: var(--primary-color); color: white; display: flex; flex-direction: column; padding: 2rem 1.5rem; box-shadow: 4px 0 15px rgba(0,0,0,0.05); z-index: 50; }
+        .sidebar-logo { font-size: 1.5rem; font-weight: bold; margin-bottom: 3rem; display: flex; align-items: center; gap: 12px; color: white; }
+        .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .sidebar-menu li { padding: 15px; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; font-weight: 500; display: flex; align-items: center; color: #cbd5e1; }
+        .sidebar-menu li:hover, .sidebar-menu li.active { background-color: rgba(255, 255, 255, 0.1); color: white; border-left: 4px solid var(--accent-color); }
+        .sidebar-footer { margin-top: auto; }
+        .btn-sair-sidebar { width: 100%; background: transparent; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-sair-sidebar:hover { background-color: #ef4444; color: white; border-color: #ef4444; }
+
+        /* ÁREA DIREITA */
+        .main-content { flex: 1; overflow-y: auto; position: relative; }
+        header { background-color: var(--surface-color); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; }
+        header h1 { font-size: 1.8rem; color: var(--primary-color); margin-bottom: 0.2rem; }
+        header p { color: var(--text-light); font-weight: 400; font-size: 0.95rem; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 3rem; }
+        .search-box { display: flex; gap: 10px; background: var(--surface-color); padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-top: 0; }
+        select, input[type="text"] { padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem; outline: none; transition: border-color 0.3s; }
+        select { background-color: white; cursor: pointer; color: var(--text-main); }
+        input[type="text"] { flex: 1; }
+        select:focus, input[type="text"]:focus { border-color: var(--accent-color); }
+        .btn-pesquisar { background-color: var(--accent-color); color: white; border: none; padding: 0 30px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-pesquisar:hover { background-color: #2563eb; }
+
+        /* SKELETON LOADING (NOVO) */
+        #loading { display: none; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; }
+        .skeleton-card { background: var(--surface-color); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-top: 4px solid #e2e8f0; display: flex; flex-direction: column; gap: 15px; }
+        .skeleton-title { height: 24px; background: #e2e8f0; border-radius: 4px; width: 40%; animation: pulse 1.5s infinite; }
+        .skeleton-line { height: 16px; background: #e2e8f0; border-radius: 4px; width: 100%; animation: pulse 1.5s infinite; }
+        .skeleton-line.short { width: 70%; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+        /* RESULTADOS E CADERNO */
+        .results-area { display: none; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; }
+        .card { background: var(--surface-color); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-top: 4px solid var(--accent-color); }
+        .card h2 { font-size: 1.25rem; color: var(--primary-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
+        .tag { background: #dbeafe; color: #1e40af; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+        
+        .action-area { grid-column: 1 / -1; text-align: center; margin-top: 1rem; }
+        .btn-salvar { background-color: #f59e0b; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;}
+        .btn-salvar:hover { background-color: #d97706; }
+
+        #sessaoCaderno { display: none; margin-top: 1rem; }
+        .item-caderno { background: var(--surface-color); padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 1.5rem; border-left: 5px solid #10b981; }
+        .item-caderno h3 { color: var(--primary-color); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-excluir { background-color: #ef4444; color: white; border: none; padding: 5px 15px; border-radius: 8px; font-size: 0.8rem; cursor: pointer;}
+        .btn-excluir:hover { background-color: #dc2626; }
+
+        @media (max-width: 768px) { .results-area, #loading { grid-template-columns: 1fr; } .search-box { flex-direction: column; } .btn-pesquisar { padding: 15px; } .sidebar { width: 100%; height: auto; padding: 1rem; } #telaApp { flex-direction: column; } }
+    </style>
+</head>
+<body>
+
+    <div id="telaAuth">
+        <div class="auth-card">
+            <h2 id="authTitulo">Bem-vindo(a)</h2>
+            <p id="authSubtitulo">Faça login para acessar o seu Vade Mecum Digital.</p>
+
+            <div class="auth-form">
+                <input type="email" id="emailInput" placeholder="Seu e-mail">
+                <input type="password" id="senhaInput" placeholder="Sua senha">
+                <button class="auth-btn" id="authBotao" onclick="processarAuth()">Entrar</button>
+            </div>
+
+            <div class="auth-toggle">
+                <p id="authTrocaTexto">Não tem uma conta? <span onclick="alternarModoAuth()">Criar minha conta</span></p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="telaApp">
+        
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                ⚖️ Vade Mecum
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li id="menuBusca" class="active" onclick="navegarMenu('busca')">
+                    🔍 Consultar Leis
+                </li>
+                <li id="menuCaderno" onclick="navegarMenu('caderno')">
+                    📚 Meu Caderno 
+                    <span id="contadorCaderno" style="background: var(--accent-color); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; margin-left: auto;">0</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <button class="btn-sair-sidebar" onclick="fazerLogout()">🚪 Sair da Conta</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <div>
+                    <h1 id="tituloPagina">Mesa de Estudos</h1>
+                    <p id="subtituloPagina">A lei traduzida, explicada e direto ao ponto para a sua aprovação.</p>
+                </div>
+            </header>
+
+            <div class="container">
+                <div id="sessaoBusca">
+                    <div class="search-box">
+                        <select id="lawSelect">
+                            <option value="cdc">CDC</option>
+                            <option value="cc">Código Civil</option>
+                            <option value="cp">Código Penal</option>
+                            <option value="cf">Constituição Federal</option>
+                        </select>
+                        <input type="text" id="searchInput" placeholder="Ex: Artigo 121..." value="Artigo 121">
+                        <button class="btn-pesquisar" onclick="realizarPesquisa()">Pesquisar</button>
+                    </div>
+
+                    <div id="loading">
+                        <div class="skeleton-card">
+                            <div class="skeleton-title"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line short"></div>
+                        </div>
+                        <div class="skeleton-card">
+                            <div class="skeleton-title"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line short"></div>
+                        </div>
+                    </div>
+
+                    <div id="resultsArea" class="results-area">
+                        <div class="card">
+                            <h2><span class="tag">Oficial</span> Texto da Lei</h2>
+                            <div id="leiSeca"></div>
+                        </div>
+
+                        <div class="card" style="border-top-color: #10b981;">
+                            <h2><span class="tag" style="background: #d1fae5; color: #065f46;">Professor IA</span> Explicação Didática</h2>
+                            <div id="explicacaoIA"></div>
+                        </div>
+                        
+                        <div class="action-area">
+                            <button class="btn-salvar" onclick="salvarNoCaderno()">💾 Salvar no Caderno</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sessaoCaderno">
+                    <div id="listaCaderno"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA42NDFJyf6dVGjKNVQGIypxQw-PMhc1ec",
+            authDomain: "vade-mecum-digital-bc76b.firebaseapp.com",
+            projectId: "vade-mecum-digital-bc76b",
+            storageBucket: "vade-mecum-digital-bc76b.firebasestorage.app",
+            messagingSenderId: "898854887053",
+            appId: "1:898854887053:web:c424cf7dba13ade3bf8cc4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let modoLogin = true;
+        let usuarioLogado = null;
+        let pesquisaAtual = { lei: '', termo: '', leiSeca: '', explicacaoIA: '' };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                usuarioLogado = user;
+                document.getElementById('telaAuth').style.display = 'none';
+                document.getElementById('telaApp').style.display = 'flex';
+                window.renderizarCaderno();
+            } else {
+                usuarioLogado = null;
+                document.getElementById('telaApp').style.display = 'none';
+                document.getElementById('telaAuth').style.display = 'flex';
+            }
+        });
+
+        window.alternarModoAuth = function() {
+            modoLogin = !modoLogin;
+            const titulo = document.getElementById('authTitulo');
+            const subtitulo = document.getElementById('authSubtitulo');
+            const botao = document.getElementById('authBotao');
+            const trocaTexto = document.getElementById('authTrocaTexto');
+
+            if (modoLogin) {
+                titulo.innerText = "Bem-vindo(a)";
+                subtitulo.innerText = "Faça login para acessar o seu Vade Mecum Digital.";
+                botao.innerText = "Entrar";
+                trocaTexto.innerHTML = 'Não tem uma conta? <span onclick="alternarModoAuth()">Criar minha conta</span>';
+            } else {
+                titulo.innerText = "Criar Conta";
+                subtitulo.innerText = "Comece a otimizar seus estudos agora mesmo.";
+                botao.innerText = "Cadastrar";
+                trocaTexto.innerHTML = 'Já tem uma conta? <span onclick="alternarModoAuth()">Faça Login</span>';
+            }
+        };
+
+        window.processarAuth = async function() {
+            const email = document.getElementById('emailInput').value;
+            const senha = document.getElementById('senhaInput').value;
+
+            if(!email || !senha) { alert("Por favor, preencha e-mail e senha."); return; }
+
+            try {
+                if (modoLogin) {
+                    await signInWithEmailAndPassword(auth, email, senha);
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, senha);
+                    alert("Conta criada com sucesso! Seja bem-vindo.");
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Erro na autenticação: " + error.message);
+            }
+        };
+
+        window.fazerLogout = function() { signOut(auth); };
+
+        window.realizarPesquisa = async function() {
+            const searchInput = document.getElementById('searchInput').value;
+            const lawSelect = document.getElementById('lawSelect');
+            const nomeLei = lawSelect.options[lawSelect.selectedIndex].text;
+            const siglaLei = lawSelect.value;
+            
+            const resultsArea = document.getElementById('resultsArea');
+            const loading = document.getElementById('loading');
+            
+            resultsArea.style.display = 'none';
+            loading.style.display = 'grid'; // Agora usa o grid do skeleton
+
+            try {
+                const resposta = await fetch('https://vademecum-api.onrender.com/api/buscar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ termo: searchInput, lei: siglaLei })
+                });
+
+                const dados = await resposta.json();
+
+                if (dados.sucesso) {
+                    document.getElementById('leiSeca').innerHTML = '<p>' + dados.lei_seca.replace(/\n/g, '<br>') + '</p>';
+                    document.getElementById('explicacaoIA').innerHTML = marked.parse(dados.explicacao_ia);
+
+                    pesquisaAtual = { lei: nomeLei, termo: searchInput, leiSeca: dados.lei_seca, explicacaoIA: dados.explicacao_ia };
+
+                    loading.style.display = 'none';
+                    resultsArea.style.display = 'grid';
+                } else {
+                    alert("Erro: " + dados.erro);
+                    loading.style.display = 'none';
+                }
+            } catch (erro) {
+                console.error("Erro:", erro);
+                alert("Ocorreu um erro ao buscar o artigo. O servidor Python está rodando?");
+                loading.style.display = 'none';
+            }
+        };
+
+        window.salvarNoCaderno = async function() {
+            if (!usuarioLogado) return;
+            try {
+                await addDoc(collection(db, "cadernos"), {
+                    uid: usuarioLogado.uid,
+                    lei: pesquisaAtual.lei,
+                    termo: pesquisaAtual.termo,
+                    leiSeca: pesquisaAtual.leiSeca,
+                    explicacaoIA: pesquisaAtual.explicacaoIA,
+                    dataSalvamento: new Date()
+                });
+                alert('Artigo salvo na nuvem com sucesso!');
+                window.renderizarCaderno();
+            } catch (e) {
+                console.error("Erro ao salvar documento: ", e);
+                alert("Erro ao salvar no caderno.");
+            }
+        };
+
+        // FUNÇÃO DE NAVEGAÇÃO CORRIGIDA
+        window.navegarMenu = function(tela) {
+            const sessaoBusca = document.getElementById('sessaoBusca');
+            const sessaoCaderno = document.getElementById('sessaoCaderno');
+            const menuBusca = document.getElementById('menuBusca');
+            const menuCaderno = document.getElementById('menuCaderno');
+            const tituloPagina = document.getElementById('tituloPagina');
+            const subtituloPagina = document.getElementById('subtituloPagina');
+            
+            if (tela === 'busca') {
+                sessaoCaderno.style.display = 'none';
+                sessaoBusca.style.display = 'block';
+                
+                menuCaderno.classList.remove('active');
+                menuBusca.classList.add('active');
+                
+                tituloPagina.innerText = "Mesa de Estudos";
+                subtituloPagina.innerText = "A lei traduzida, explicada e direto ao ponto para a sua aprovação.";
+            } else if (tela === 'caderno') {
+                sessaoBusca.style.display = 'none';
+                sessaoCaderno.style.display = 'block';
+                
+                menuBusca.classList.remove('active');
+                menuCaderno.classList.add('active');
+                
+                tituloPagina.innerText = "Meu Caderno Digital";
+                subtituloPagina.innerText = "Suas anotações e explicações salvas na nuvem.";
+                window.renderizarCaderno();
+            }
+        };
+
+        window.renderizarCaderno = async function() {
+            if (!usuarioLogado) return;
+            
+            const listaCaderno = document.getElementById('listaCaderno');
+            listaCaderno.innerHTML = '<p>Buscando seu caderno na nuvem...</p>';
+            
+            try {
+                const q = query(collection(db, "cadernos"), where("uid", "==", usuarioLogado.uid));
+                const querySnapshot = await getDocs(q);
+                
+                document.getElementById('contadorCaderno').innerText = querySnapshot.size;
+                listaCaderno.innerHTML = ''; 
+
+                if (querySnapshot.empty) {
+                    listaCaderno.innerHTML = '<p>Seu caderno está vazio. Busque um artigo e clique em "Salvar no Caderno"!</p>';
+                    return;
+                }
+
+                querySnapshot.forEach((documento) => {
+                    const item = documento.data();
+                    const docId = documento.id;
+                    
+                    const htmlItem = `
+                        <div class="item-caderno" id="doc-${docId}">
+                            <h3><span>${item.lei} - ${item.termo}</span><button class="btn-excluir" onclick="removerDoCaderno('${docId}')">Excluir</button></h3>
+                            <details style="margin-top: 10px; cursor: pointer;">
+                                <summary style="font-weight: bold; color: var(--accent-color);">Ver Lei Seca</summary>
+                                <p style="margin-top: 10px; padding: 10px; background: #f1f5f9; border-radius: 8px;">${item.leiSeca.replace(/\n/g, '<br>')}</p>
+                            </details>
+                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e2e8f0;">${marked.parse(item.explicacaoIA)}</div>
+                        </div>
+                    `;
+                    listaCaderno.innerHTML += htmlItem;
+                });
+            } catch (e) {
+                console.error("Erro ao buscar caderno: ", e);
+                listaCaderno.innerHTML = '<p>Erro ao carregar o caderno.</p>';
+            }
+        };
+
+        window.removerDoCaderno = async function(docId) {
+            try {
+                await deleteDoc(doc(db, "cadernos", docId));
+                document.getElementById(`doc-${docId}`).remove();
+                
+                let atual = parseInt(document.getElementById('contadorCaderno').innerText);
+                document.getElementById('contadorCaderno').innerText = atual - 1;
+            } catch (e) {
+                console.error("Erro ao excluir: ", e);
+                alert("Erro ao excluir do caderno.");
+            }
+        };
+    </script>
+</body>
+</html>
