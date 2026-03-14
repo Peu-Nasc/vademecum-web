@@ -7,221 +7,121 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> 
 
     <style>
-        /* ==================== VARIÁVEIS MODERNIZADAS ==================== */
+        /* ==================== PALETA DE CORES STARTUP PREMIUM ==================== */
         :root {
-            --primary-color: #0f172a; 
-            --primary-light: #1e293b;
-            --accent-color: #2563eb; 
-            --accent-hover: #1d4ed8;
-            --bg-color: #f8fafc;
-            --surface-color: #ffffff; 
-            --text-main: #334155; 
-            --text-light: #64748b;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-float: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --bg-body: #f1f5f9;
+            --bg-sidebar: #020617;
+            --bg-sidebar-hover: #1e293b;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --brand-primary: #3b82f6;
+            --brand-hover: #2563eb;
+            --border-light: #e2e8f0;
+            --shadow-subtle: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-heavy: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-xl: 20px;
             --radius-md: 12px;
-            --radius-lg: 16px;
         }
 
-        /* ==================== RESET & BASE ==================== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        body { background-color: var(--bg-body); color: var(--text-main); -webkit-font-smoothing: antialiased; overflow: hidden; }
 
-        /* ==================== TELA DE LOGIN PREMIUM ==================== */
-        #telaAuth { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: radial-gradient(circle at top left, #1e293b, var(--primary-color)); }
-        .auth-card { 
-            background: var(--surface-color); padding: 3.5rem 3rem; border-radius: var(--radius-lg); 
-            box-shadow: var(--shadow-float); width: 100%; max-width: 420px; text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .auth-card h2 { color: var(--primary-color); margin-bottom: 0.5rem; font-size: 2rem; font-weight: 700; letter-spacing: -0.025em; }
-        .auth-card p { color: var(--text-light); margin-bottom: 2.5rem; font-size: 0.95rem; }
+        /* ==================== TELA DE LOGIN ==================== */
+        #telaAuth { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #020617 0%, #1e293b 100%); }
+        .auth-card { background: var(--surface-color); padding: 3.5rem; border-radius: var(--radius-xl); box-shadow: var(--shadow-heavy); width: 100%; max-width: 440px; text-align: center; }
+        .auth-card h2 { font-weight: 800; font-size: 2.2rem; color: #020617; letter-spacing: -1px; margin-bottom: 0.5rem; }
+        .auth-card p { color: var(--text-muted); margin-bottom: 2.5rem; }
         .auth-form { display: flex; flex-direction: column; gap: 16px; }
-        .auth-form input { 
-            padding: 16px; border: 1px solid var(--border-color); border-radius: var(--radius-md); 
-            font-size: 1rem; outline: none; transition: all 0.2s ease; background: #f8fafc;
-        }
-        .auth-form input:focus { border-color: var(--accent-color); background: #ffffff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
-        .auth-btn { 
-            background-color: var(--accent-color); color: white; padding: 16px; border: none; 
-            border-radius: var(--radius-md); font-size: 1rem; font-weight: 600; cursor: pointer; 
-            transition: all 0.2s ease; margin-top: 8px; box-shadow: var(--shadow-md);
-        }
-        .auth-btn:hover { background-color: var(--accent-hover); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-        .auth-toggle { margin-top: 24px; color: var(--text-light); font-size: 0.95rem; }
-        .auth-toggle span { color: var(--accent-color); cursor: pointer; font-weight: 600; transition: color 0.2s ease; }
-        .auth-toggle span:hover { color: var(--accent-hover); text-decoration: underline; }
+        .auth-form input { padding: 16px 20px; border: 1.5px solid var(--border-light); border-radius: var(--radius-md); font-size: 1rem; transition: 0.2s; background: #f8fafc; }
+        .auth-form input:focus { border-color: var(--brand-primary); background: #fff; outline: none; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+        .auth-btn { background: var(--brand-primary); color: white; padding: 16px; border: none; border-radius: var(--radius-md); font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .auth-btn:hover { background: var(--brand-hover); transform: translateY(-2px); }
+        .auth-toggle { margin-top: 24px; color: var(--text-muted); font-size: 0.95rem; }
+        .auth-toggle span { color: var(--brand-primary); font-weight: 600; cursor: pointer; }
 
-        /* ==================== DASHBOARD PRINCIPAL ==================== */
-        #telaApp { display: none; height: 100vh; width: 100vw; overflow: hidden; background-color: var(--bg-color); }
-
-        /* BARRA LATERAL (SIDEBAR) */
-        .sidebar { 
-            width: 280px; background: linear-gradient(180deg, var(--primary-color) 0%, var(--primary-light) 100%); 
-            color: white; display: flex; flex-direction: column; padding: 2.5rem 1.5rem; 
-            box-shadow: 4px 0 24px rgba(0,0,0,0.1); z-index: 50; border-right: 1px solid rgba(255,255,255,0.05);
-        }
-        .sidebar-logo { font-size: 1.5rem; font-weight: 700; margin-bottom: 3rem; display: flex; align-items: center; gap: 12px; letter-spacing: -0.025em; }
+        /* ==================== DASHBOARD (SIDEBAR + MAIN) ==================== */
+        #telaApp { display: none; height: 100vh; width: 100vw; display: flex; } /* Controlado pelo JS */
+        
+        .sidebar { width: 260px; background: var(--bg-sidebar); padding: 2rem 1.5rem; display: flex; flex-direction: column; color: #fff; }
+        .sidebar-logo { font-size: 1.4rem; font-weight: 800; margin-bottom: 3rem; display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px; }
         .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-        .sidebar-menu li { 
-            padding: 14px 16px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; 
-            font-weight: 500; display: flex; align-items: center; color: #94a3b8; border: 1px solid transparent;
-        }
-        .sidebar-menu li:hover { background-color: rgba(255, 255, 255, 0.05); color: white; }
-        .sidebar-menu li.active { 
-            background-color: rgba(37, 99, 235, 0.15); color: #60a5fa; 
-            border: 1px solid rgba(37, 99, 235, 0.3); font-weight: 600;
-        }
-        .sidebar-footer { margin-top: auto; }
-        .btn-sair-sidebar { 
-            width: 100%; background: rgba(255,255,255,0.05); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); 
-            padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; 
-        }
-        .btn-sair-sidebar:hover { background-color: #ef4444; color: white; border-color: #ef4444; transform: translateY(-2px); }
+        .sidebar-menu li { padding: 14px 16px; border-radius: 10px; cursor: pointer; transition: 0.2s; font-weight: 500; color: #94a3b8; display: flex; align-items: center; justify-content: space-between; }
+        .sidebar-menu li:hover { background: var(--bg-sidebar-hover); color: #fff; }
+        .sidebar-menu li.active { background: rgba(59, 130, 246, 0.15); color: #60a5fa; font-weight: 600; }
+        .badge { background: var(--brand-primary); color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.8rem; }
+        .btn-sair-sidebar { margin-top: auto; width: 100%; background: transparent; color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-sair-sidebar:hover { background: #ef4444; color: white; }
 
-        /* ÁREA DIREITA (CONTEÚDO) */
-        .main-content { flex: 1; overflow-y: auto; position: relative; scroll-behavior: smooth; }
+        .main-content { flex: 1; background: var(--bg-body); overflow-y: auto; position: relative; scroll-behavior: smooth; }
         
-        /* CABEÇALHO DO APP */
-        header { 
-            background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; 
-            border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 40;
-        }
-        header h1 { font-size: 1.8rem; color: var(--primary-color); margin-bottom: 0.2rem; font-weight: 700; letter-spacing: -0.025em; }
-        header p { color: var(--text-light); font-weight: 400; font-size: 0.95rem; }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 2.5rem 3rem; }
+        /* ==================== ÁREA DE BUSCA (HERO SECTION) ==================== */
+        .hero-section { background: var(--surface-color); padding: 4rem 3rem; border-bottom: 1px solid var(--border-light); text-align: center; }
+        .hero-section h1 { font-size: 2.5rem; font-weight: 800; color: var(--text-main); letter-spacing: -1px; margin-bottom: 0.5rem; }
+        .hero-section p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 2.5rem auto; }
         
-        /* CAIXA DE BUSCA */
-        .search-box { 
-            display: flex; gap: 12px; background: var(--surface-color); padding: 12px; 
-            border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); border: 1px solid var(--border-color);
-        }
-        select, input[type="text"] { 
-            padding: 16px; border: 1px solid transparent; border-radius: var(--radius-md); 
-            font-size: 1rem; outline: none; transition: all 0.2s ease; background: #f8fafc;
-        }
-        select { cursor: pointer; color: var(--text-main); font-weight: 500; min-width: 200px; }
-        input[type="text"] { flex: 1; }
-        select:focus, input[type="text"]:focus { background: #ffffff; border-color: var(--accent-color); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
-        .btn-pesquisar { 
-            background-color: var(--accent-color); color: white; border: none; padding: 0 32px; 
-            border-radius: var(--radius-md); font-size: 1rem; font-weight: 600; cursor: pointer; 
-            transition: all 0.2s ease; box-shadow: var(--shadow-sm);
-        }
-        .btn-pesquisar:hover { background-color: var(--accent-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .search-container { max-width: 800px; margin: 0 auto; display: flex; gap: 10px; background: white; padding: 8px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-heavy); }
+        .search-container select { border: none; background: #f8fafc; padding: 0 20px; border-radius: 10px; font-weight: 600; color: var(--text-main); cursor: pointer; outline: none; }
+        .search-container input { flex: 1; border: none; padding: 20px; font-size: 1.1rem; outline: none; border-radius: 10px; }
+        .btn-pesquisar { background: var(--text-main); color: white; border: none; padding: 0 40px; border-radius: 10px; font-weight: 600; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
+        .btn-pesquisar:hover { background: var(--brand-primary); }
 
+        /* ==================== ÁREA DE RESULTADOS ==================== */
+        .container { max-width: 1200px; margin: 0 auto; padding: 3rem; }
+        
         /* SKELETON LOADING */
-        #loading { display: none; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; }
-        .skeleton-card { background: var(--surface-color); padding: 2.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 16px; }
-        .skeleton-title { height: 28px; background: #e2e8f0; border-radius: 6px; width: 40%; animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        .skeleton-line { height: 16px; background: #f1f5f9; border-radius: 4px; width: 100%; animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        .skeleton-line.short { width: 75%; }
+        #loading { display: none; text-align: center; margin-top: 1rem; }
+        .loader-text { font-size: 1.2rem; font-weight: 600; color: var(--brand-primary); animation: pulse 1.5s infinite; margin-bottom: 2rem;}
+        .skeleton-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .skeleton-card { background: var(--surface-color); padding: 3rem; border-radius: var(--radius-xl); border: 1px solid var(--border-light); }
+        .skel-line { height: 16px; background: #e2e8f0; border-radius: 8px; margin-bottom: 12px; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        /* ÁREA DE RESULTADOS E CADERNO */
-        .results-area { display: none; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; }
-        .card { 
-            background: var(--surface-color); padding: 2.5rem; border-radius: var(--radius-lg); 
-            box-shadow: var(--shadow-md); border: 1px solid var(--border-color);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
-        .card h2 { font-size: 1.25rem; color: var(--primary-color); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; font-weight: 700; }
-        .tag { padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
-        .tag-oficial { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
-        .tag-ia { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+        /* CARDS REAIS */
+        .results-area { display: none; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .card { background: var(--surface-color); padding: 3rem; border-radius: var(--radius-xl); box-shadow: var(--shadow-subtle); border: 1px solid var(--border-light); }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 2rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1rem; }
+        .card h2 { font-size: 1.5rem; font-weight: 800; color: var(--text-main); }
+        .tag { padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .tag-oficial { background: #f1f5f9; color: #475569; }
+        .tag-ia { background: #eff6ff; color: var(--brand-primary); }
         
-        .action-area { grid-column: 1 / -1; text-align: right; margin-top: 1rem; }
-        .btn-salvar { 
-            background-color: #10b981; color: white; border: none; padding: 14px 28px; 
-            border-radius: var(--radius-md); font-weight: 600; cursor: pointer; transition: all 0.2s ease;
-            box-shadow: var(--shadow-sm); display: inline-flex; align-items: center; gap: 8px;
-        }
-        .btn-salvar:hover { background-color: #059669; transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        /* FORMATANDO A EXPLICAÇÃO DA IA (MARKDOWN) */
+        #leiSeca { color: #334155; font-size: 1.1rem; line-height: 1.8; }
+        #explicacaoIA { color: #334155; font-size: 1.1rem; line-height: 1.8; }
+        #explicacaoIA h3 { color: var(--text-main); margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; font-weight: 800; }
+        #explicacaoIA h3:first-child { margin-top: 0; }
+        #explicacaoIA p { margin-bottom: 1rem; }
+        #explicacaoIA ul { margin-bottom: 1.5rem; padding-left: 1.5rem; }
+        #explicacaoIA li { margin-bottom: 0.5rem; }
+        #explicacaoIA strong { color: var(--text-main); background: #f1f5f9; padding: 2px 6px; border-radius: 6px; }
+
+        .btn-salvar { grid-column: 1 / -1; background: #10b981; color: white; border: none; padding: 16px 32px; border-radius: var(--radius-md); font-weight: 600; font-size: 1.1rem; cursor: pointer; transition: 0.2s; justify-self: center; display: inline-flex; align-items: center; gap: 8px; box-shadow: var(--shadow-subtle); }
+        .btn-salvar:hover { background: #059669; transform: translateY(-2px); }
 
         /* ITEM DO CADERNO */
-        #sessaoCaderno { display: none; margin-top: 1rem; }
-        .item-caderno { 
-            background: var(--surface-color); padding: 2rem; border-radius: var(--radius-lg); 
-            box-shadow: var(--shadow-sm); margin-bottom: 1.5rem; border: 1px solid var(--border-color);
-            border-left: 6px solid #10b981; transition: all 0.2s ease;
-        }
-        .item-caderno:hover { box-shadow: var(--shadow-md); transform: translateX(4px); }
-        .item-caderno h3 { color: var(--primary-color); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; }
-        .btn-excluir { 
-            background-color: #fee2e2; color: #ef4444; border: 1px solid #fecaca; padding: 6px 16px; 
-            border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;
-        }
-        .btn-excluir:hover { background-color: #ef4444; color: white; }
+        #sessaoCaderno { display: none; }
+        .item-caderno { background: var(--surface-color); padding: 2.5rem; border-radius: var(--radius-xl); box-shadow: var(--shadow-subtle); margin-bottom: 1.5rem; border: 1px solid var(--border-light); border-left: 8px solid #10b981; }
+        .item-caderno h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; display: flex; justify-content: space-between; }
+        .btn-excluir { background: #fee2e2; color: #ef4444; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-excluir:hover { background: #ef4444; color: white; }
 
-        /* CONTEÚDO DA LEI E IA (Markdown) */
-        #leiSeca { color: #475569; font-size: 1.05rem; line-height: 1.8; }
-        
-        /* A MÁGICA DA TIPOGRAFIA DA IA ACONTECE AQUI */
-        #explicacaoIA { color: #334155; font-size: 1.05rem; line-height: 1.8; }
-        
-        /* Títulos mais imponentes e com divisórias sutis */
-        #explicacaoIA h3 { 
-            color: var(--primary-color); 
-            margin-top: 2.5rem; 
-            margin-bottom: 1.25rem; 
-            font-size: 1.25rem; 
-            font-weight: 700; 
-            border-bottom: 2px solid var(--border-color); 
-            padding-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-        }
-        #explicacaoIA h3:first-child { margin-top: 0; }
-        
-        /* Respiro entre os parágrafos */
-        #explicacaoIA p { margin-bottom: 1.25rem; }
-        
-        /* Listas organizadas e indentadas */
-        #explicacaoIA ul, #explicacaoIA ol { 
-            margin-bottom: 1.5rem; 
-            padding-left: 1.5rem; 
-        }
-        #explicacaoIA li { 
-            margin-bottom: 0.75rem; 
-            padding-left: 0.5rem;
-        }
-        #explicacaoIA li::marker { color: var(--accent-color); font-weight: bold; }
-        
-        /* Destaques (negrito) com cara de marca-texto premium */
-        #explicacaoIA strong { 
-            color: var(--primary-color); 
-            font-weight: 600; 
-            background: rgba(37, 99, 235, 0.06); 
-            padding: 2px 6px; 
-            border-radius: 4px; 
-        }
-
-        /* RESPONSIVIDADE */
-        @media (max-width: 992px) { 
-            .results-area, #loading { grid-template-columns: 1fr; } 
-        }
+        @media (max-width: 992px) { .results-area, .skeleton-grid { grid-template-columns: 1fr; } }
         @media (max-width: 768px) { 
-            .search-box { flex-direction: column; padding: 16px; background: transparent; box-shadow: none; border: none; } 
-            .btn-pesquisar { padding: 16px; } 
-            .sidebar { width: 100%; height: auto; padding: 1.5rem; flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; } 
-            .sidebar-logo { margin-bottom: 0; }
+            #telaApp { flex-direction: column; } 
+            .sidebar { width: 100%; padding: 1.5rem; flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; } 
+            .sidebar-logo, .sidebar-footer { margin: 0; }
             .sidebar-menu { flex-direction: row; width: 100%; margin-top: 1rem; }
-            .sidebar-footer { width: 100%; margin-top: 1rem; }
-            #telaApp { flex-direction: column; overflow-y: auto; } 
-            .main-content { overflow-y: visible; }
-            header { padding: 1.5rem; position: relative; }
+            .hero-section { padding: 3rem 1.5rem; }
+            .search-container { flex-direction: column; background: transparent; box-shadow: none; border: none; padding: 0; }
+            .search-container select, .search-container input { padding: 16px; border: 1px solid var(--border-light); background: white; }
+            .btn-pesquisar { padding: 16px; }
             .container { padding: 1.5rem; }
+            .card { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -230,99 +130,84 @@
     <div id="telaAuth">
         <div class="auth-card">
             <h2 id="authTitulo">Bem-vindo(a)</h2>
-            <p id="authSubtitulo">Faça login para acessar o seu Vade Mecum Digital.</p>
-
+            <p id="authSubtitulo">Acesse seu ambiente de estudos.</p>
             <div class="auth-form">
                 <input type="email" id="emailInput" placeholder="Seu e-mail">
                 <input type="password" id="senhaInput" placeholder="Sua senha">
                 <button class="auth-btn" id="authBotao" onclick="processarAuth()">Entrar</button>
             </div>
-
             <div class="auth-toggle">
                 <p id="authTrocaTexto">Não tem uma conta? <span onclick="alternarModoAuth()">Criar minha conta</span></p>
             </div>
         </div>
     </div>
 
-
-    <div id="telaApp">
+    <div id="telaApp" style="display: none;">
         
         <aside class="sidebar">
-            <div class="sidebar-logo">
-                ⚖️ Vade Mecum
-            </div>
-            
+            <div class="sidebar-logo">⚖️ Vade Mecum</div>
             <ul class="sidebar-menu">
-                <li id="menuBusca" class="active" onclick="navegarMenu('busca')">
-                    🔍 Consultar Leis
-                </li>
-                <li id="menuCaderno" onclick="navegarMenu('caderno')">
-                    📚 Meu Caderno 
-                    <span id="contadorCaderno" style="background: var(--accent-color); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; margin-left: auto;">0</span>
-                </li>
+                <li id="menuBusca" class="active" onclick="navegarMenu('busca')">🔍 Consultar Leis</li>
+                <li id="menuCaderno" onclick="navegarMenu('caderno')">📚 Meu Caderno <span class="badge" id="contadorCaderno">0</span></li>
             </ul>
-
             <div class="sidebar-footer">
-                <button class="btn-sair-sidebar" onclick="fazerLogout()">🚪 Sair da Conta</button>
+                <button class="btn-sair-sidebar" onclick="fazerLogout()">Sair da Conta</button>
             </div>
         </aside>
 
         <main class="main-content">
-            <header>
-                <div>
-                    <h1 id="tituloPagina">Mesa de Estudos</h1>
-                    <p id="subtituloPagina">A lei traduzida, explicada e direto ao ponto para a sua aprovação.</p>
-                </div>
-            </header>
-
-            <div class="container">
-                <div id="sessaoBusca">
-                    <div class="search-box">
+            
+            <div id="sessaoBusca">
+                <div class="hero-section">
+                    <h1>Sua Mesa de Estudos</h1>
+                    <p>Pesquise pelo número do artigo ou simplesmente digite o assunto (ex: feminicídio, usucapião, legítima defesa).</p>
+                    
+                    <div class="search-container">
                         <select id="lawSelect">
-                            <option value="cdc">CDC</option>
+                            <option value="cdc">Defesa do Consumidor</option>
                             <option value="cc">Código Civil</option>
                             <option value="cp">Código Penal</option>
                             <option value="cf">Constituição Federal</option>
                         </select>
-                        <input type="text" id="searchInput" placeholder="Ex: Artigo 121..." value="Artigo 121">
+                        <input type="text" id="searchInput" placeholder="Ex: Artigo 121 ou Feminicídio...">
                         <button class="btn-pesquisar" onclick="realizarPesquisa()">Pesquisar</button>
                     </div>
+                </div>
 
+                <div class="container">
                     <div id="loading">
-                        <div class="skeleton-card">
-                            <div class="skeleton-title"></div>
-                            <div class="skeleton-line"></div>
-                            <div class="skeleton-line"></div>
-                            <div class="skeleton-line short"></div>
-                        </div>
-                        <div class="skeleton-card">
-                            <div class="skeleton-title"></div>
-                            <div class="skeleton-line"></div>
-                            <div class="skeleton-line"></div>
-                            <div class="skeleton-line short"></div>
+                        <div class="loader-text" id="textoLoading">A Inteligência Artificial está buscando o artigo...</div>
+                        <div class="skeleton-grid">
+                            <div class="skeleton-card"><div class="skel-line" style="width: 40%; height: 24px;"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line" style="width: 70%;"></div></div>
+                            <div class="skeleton-card"><div class="skel-line" style="width: 40%; height: 24px;"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line" style="width: 70%;"></div></div>
                         </div>
                     </div>
 
                     <div id="resultsArea" class="results-area">
                         <div class="card">
-                            <h2><span class="tag tag-oficial">Oficial</span> Texto da Lei</h2>
+                            <div class="card-header">
+                                <span class="tag tag-oficial">Oficial</span>
+                                <h2>Texto da Lei</h2>
+                            </div>
                             <div id="leiSeca"></div>
                         </div>
 
-                        <div class="card" style="border-top-color: #10b981;">
-                            <h2><span class="tag tag-ia">Professor IA</span> Explicação Didática</h2>
+                        <div class="card" style="border-top: 6px solid var(--brand-primary);">
+                            <div class="card-header">
+                                <span class="tag tag-ia">Professor IA</span>
+                                <h2>Explicação Didática</h2>
+                            </div>
                             <div id="explicacaoIA"></div>
                         </div>
                         
-                        <div class="action-area">
-                            <button class="btn-salvar" onclick="salvarNoCaderno()">💾 Salvar no Caderno</button>
-                        </div>
+                        <button class="btn-salvar" onclick="salvarNoCaderno()">💾 Salvar Resumo no Caderno</button>
                     </div>
                 </div>
+            </div>
 
-                <div id="sessaoCaderno">
-                    <div id="listaCaderno"></div>
-                </div>
+            <div class="container" id="sessaoCaderno" style="display: none;">
+                <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 2rem;">Meu Caderno Digital</h1>
+                <div id="listaCaderno"></div>
             </div>
         </main>
     </div>
@@ -330,7 +215,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA42NDFJyf6dVGjKNVQGIypxQw-PMhc1ec",
@@ -371,12 +256,12 @@
 
             if (modoLogin) {
                 titulo.innerText = "Bem-vindo(a)";
-                subtitulo.innerText = "Faça login para acessar o seu Vade Mecum Digital.";
+                subtitulo.innerText = "Acesse seu ambiente de estudos.";
                 botao.innerText = "Entrar";
                 trocaTexto.innerHTML = 'Não tem uma conta? <span onclick="alternarModoAuth()">Criar minha conta</span>';
             } else {
                 titulo.innerText = "Criar Conta";
-                subtitulo.innerText = "Comece a otimizar seus estudos agora mesmo.";
+                subtitulo.innerText = "Sua jornada jurídica começa aqui.";
                 botao.innerText = "Cadastrar";
                 trocaTexto.innerHTML = 'Já tem uma conta? <span onclick="alternarModoAuth()">Faça Login</span>';
             }
@@ -385,20 +270,11 @@
         window.processarAuth = async function() {
             const email = document.getElementById('emailInput').value;
             const senha = document.getElementById('senhaInput').value;
-
-            if(!email || !senha) { alert("Por favor, preencha e-mail e senha."); return; }
-
+            if(!email || !senha) return alert("Preencha os dados.");
             try {
-                if (modoLogin) {
-                    await signInWithEmailAndPassword(auth, email, senha);
-                } else {
-                    await createUserWithEmailAndPassword(auth, email, senha);
-                    alert("Conta criada com sucesso! Seja bem-vindo.");
-                }
-            } catch (error) {
-                console.error(error);
-                alert("Erro na autenticação: " + error.message);
-            }
+                if (modoLogin) await signInWithEmailAndPassword(auth, email, senha);
+                else await createUserWithEmailAndPassword(auth, email, senha);
+            } catch (error) { alert("Erro: " + error.message); }
         };
 
         window.fazerLogout = function() { signOut(auth); };
@@ -411,9 +287,16 @@
             
             const resultsArea = document.getElementById('resultsArea');
             const loading = document.getElementById('loading');
+            const textoLoading = document.getElementById('textoLoading');
             
+            if(!searchInput) return;
+
             resultsArea.style.display = 'none';
-            loading.style.display = 'grid'; // Agora usa o grid do skeleton
+            loading.style.display = 'block';
+            
+            // Troca o texto animado
+            textoLoading.innerText = "A IA está vasculhando a legislação...";
+            setTimeout(() => { textoLoading.innerText = "Traduzindo o juridiquês..."; }, 3500);
 
             try {
                 const resposta = await fetch('https://vademecum-api.onrender.com/api/buscar', {
@@ -425,20 +308,26 @@
                 const dados = await resposta.json();
 
                 if (dados.sucesso) {
+                    // Opcional: Mostra o número real do artigo descoberto se foi busca por palavra
+                    let tituloBusca = searchInput;
+                    if(dados.artigo_identificado) {
+                        tituloBusca = `${searchInput} (Artigo ${dados.artigo_identificado})`;
+                    }
+
                     document.getElementById('leiSeca').innerHTML = '<p>' + dados.lei_seca.replace(/\n/g, '<br>') + '</p>';
                     document.getElementById('explicacaoIA').innerHTML = marked.parse(dados.explicacao_ia);
 
-                    pesquisaAtual = { lei: nomeLei, termo: searchInput, leiSeca: dados.lei_seca, explicacaoIA: dados.explicacao_ia };
+                    pesquisaAtual = { lei: nomeLei, termo: tituloBusca, leiSeca: dados.lei_seca, explicacaoIA: dados.explicacao_ia };
 
                     loading.style.display = 'none';
                     resultsArea.style.display = 'grid';
                 } else {
-                    alert("Erro: " + dados.erro);
+                    alert("Aviso: " + dados.erro);
                     loading.style.display = 'none';
                 }
             } catch (erro) {
                 console.error("Erro:", erro);
-                alert("Ocorreu um erro ao buscar o artigo. O servidor Python está rodando?");
+                alert("Erro ao comunicar com o servidor. Tente novamente.");
                 loading.style.display = 'none';
             }
         };
@@ -447,103 +336,53 @@
             if (!usuarioLogado) return;
             try {
                 await addDoc(collection(db, "cadernos"), {
-                    uid: usuarioLogado.uid,
-                    lei: pesquisaAtual.lei,
-                    termo: pesquisaAtual.termo,
-                    leiSeca: pesquisaAtual.leiSeca,
-                    explicacaoIA: pesquisaAtual.explicacaoIA,
-                    dataSalvamento: new Date()
+                    uid: usuarioLogado.uid, lei: pesquisaAtual.lei, termo: pesquisaAtual.termo,
+                    leiSeca: pesquisaAtual.leiSeca, explicacaoIA: pesquisaAtual.explicacaoIA, dataSalvamento: new Date()
                 });
-                alert('Artigo salvo na nuvem com sucesso!');
+                alert('Salvo no Caderno Digital!');
                 window.renderizarCaderno();
-            } catch (e) {
-                console.error("Erro ao salvar documento: ", e);
-                alert("Erro ao salvar no caderno.");
-            }
+            } catch (e) { alert("Erro ao salvar."); }
         };
 
-        // FUNÇÃO DE NAVEGAÇÃO CORRIGIDA
         window.navegarMenu = function(tela) {
-            const sessaoBusca = document.getElementById('sessaoBusca');
-            const sessaoCaderno = document.getElementById('sessaoCaderno');
-            const menuBusca = document.getElementById('menuBusca');
-            const menuCaderno = document.getElementById('menuCaderno');
-            const tituloPagina = document.getElementById('tituloPagina');
-            const subtituloPagina = document.getElementById('subtituloPagina');
-            
-            if (tela === 'busca') {
-                sessaoCaderno.style.display = 'none';
-                sessaoBusca.style.display = 'block';
-                
-                menuCaderno.classList.remove('active');
-                menuBusca.classList.add('active');
-                
-                tituloPagina.innerText = "Mesa de Estudos";
-                subtituloPagina.innerText = "A lei traduzida, explicada e direto ao ponto para a sua aprovação.";
-            } else if (tela === 'caderno') {
-                sessaoBusca.style.display = 'none';
-                sessaoCaderno.style.display = 'block';
-                
-                menuBusca.classList.remove('active');
-                menuCaderno.classList.add('active');
-                
-                tituloPagina.innerText = "Meu Caderno Digital";
-                subtituloPagina.innerText = "Suas anotações e explicações salvas na nuvem.";
-                window.renderizarCaderno();
-            }
+            document.getElementById('sessaoBusca').style.display = tela === 'busca' ? 'block' : 'none';
+            document.getElementById('sessaoCaderno').style.display = tela === 'caderno' ? 'block' : 'none';
+            document.getElementById('menuBusca').classList.toggle('active', tela === 'busca');
+            document.getElementById('menuCaderno').classList.toggle('active', tela === 'caderno');
+            if(tela === 'caderno') window.renderizarCaderno();
         };
 
         window.renderizarCaderno = async function() {
             if (!usuarioLogado) return;
-            
             const listaCaderno = document.getElementById('listaCaderno');
-            listaCaderno.innerHTML = '<p>Buscando seu caderno na nuvem...</p>';
-            
             try {
                 const q = query(collection(db, "cadernos"), where("uid", "==", usuarioLogado.uid));
                 const querySnapshot = await getDocs(q);
-                
                 document.getElementById('contadorCaderno').innerText = querySnapshot.size;
                 listaCaderno.innerHTML = ''; 
+                if (querySnapshot.empty) return listaCaderno.innerHTML = '<p>Seu caderno está vazio.</p>';
 
-                if (querySnapshot.empty) {
-                    listaCaderno.innerHTML = '<p>Seu caderno está vazio. Busque um artigo e clique em "Salvar no Caderno"!</p>';
-                    return;
-                }
-
-                querySnapshot.forEach((documento) => {
-                    const item = documento.data();
-                    const docId = documento.id;
-                    
-                    const htmlItem = `
-                        <div class="item-caderno" id="doc-${docId}">
-                            <h3><span>${item.lei} - ${item.termo}</span><button class="btn-excluir" onclick="removerDoCaderno('${docId}')">Excluir</button></h3>
-                            <details style="margin-top: 10px; cursor: pointer;">
-                                <summary style="font-weight: bold; color: var(--accent-color);">Ver Lei Seca</summary>
-                                <p style="margin-top: 10px; padding: 10px; background: #f1f5f9; border-radius: 8px;">${item.leiSeca.replace(/\n/g, '<br>')}</p>
+                querySnapshot.forEach((docSnap) => {
+                    const item = docSnap.data();
+                    listaCaderno.innerHTML += `
+                        <div class="item-caderno" id="doc-${docSnap.id}">
+                            <h3><span>${item.lei} - ${item.termo}</span><button class="btn-excluir" onclick="removerDoCaderno('${docSnap.id}')">Excluir</button></h3>
+                            <details style="margin: 15px 0; cursor: pointer; color: var(--brand-primary); font-weight: 600;">
+                                <summary>Ler Lei Original</summary>
+                                <div style="margin-top: 10px; padding: 15px; background: #f8fafc; border-radius: 8px; color: #475569; font-weight: 400;">${item.leiSeca.replace(/\n/g, '<br>')}</div>
                             </details>
-                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e2e8f0;">${marked.parse(item.explicacaoIA)}</div>
-                        </div>
-                    `;
-                    listaCaderno.innerHTML += htmlItem;
+                            <div style="border-top: 1px solid #e2e8f0; padding-top: 15px;">${marked.parse(item.explicacaoIA)}</div>
+                        </div>`;
                 });
-            } catch (e) {
-                console.error("Erro ao buscar caderno: ", e);
-                listaCaderno.innerHTML = '<p>Erro ao carregar o caderno.</p>';
-            }
+            } catch (e) { listaCaderno.innerHTML = '<p>Erro ao carregar caderno.</p>'; }
         };
 
         window.removerDoCaderno = async function(docId) {
             try {
                 await deleteDoc(doc(db, "cadernos", docId));
                 document.getElementById(`doc-${docId}`).remove();
-                
-                let atual = parseInt(document.getElementById('contadorCaderno').innerText);
-                document.getElementById('contadorCaderno').innerText = atual - 1;
-            } catch (e) {
-                console.error("Erro ao excluir: ", e);
-                alert("Erro ao excluir do caderno.");
-            }
+                document.getElementById('contadorCaderno').innerText = parseInt(document.getElementById('contadorCaderno').innerText) - 1;
+            } catch (e) { alert("Erro ao excluir."); }
         };
     </script>
 </body>
