@@ -207,12 +207,148 @@
         max-width: 250px; /* Diminui um pouco para não ocupar a tela toda no celular */
     }
 }
+
+/* ==================== POP-UP DO PROFESSOR BOOG ==================== */
+.boog-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(2, 6, 23, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    animation: fadeIn 0.4s forwards ease-out;
+}
+
+.boog-modal-content {
+    background: var(--surface-color);
+    width: 90%;
+    max-width: 750px;
+    border-radius: var(--radius-xl);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    display: flex;
+    overflow: hidden;
+    transform: translateY(30px);
+    animation: slideUp 0.5s forwards ease-out;
+    border: 2px solid var(--brand-primary);
+}
+
+.boog-modal-image {
+    background: #f8fafc;
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    border-right: 1px solid var(--border-light);
+}
+
+.boog-modal-image img {
+    width: 100%;
+    max-width: 250px;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+}
+
+.boog-modal-text {
+    padding: 3rem;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.boog-modal-text h2 {
+    font-size: 1.8rem;
+    color: var(--text-main);
+    margin-bottom: 1rem;
+    font-weight: 800;
+}
+
+.boog-modal-text p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.boog-modal-text ul {
+    list-style: none;
+    margin-bottom: 2rem;
+}
+
+.boog-modal-text li {
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-boog-start {
+    background: var(--brand-primary);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: 0.2s;
+    width: 100%;
+}
+
+.btn-boog-start:hover {
+    background: var(--brand-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+}
+
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes slideUp { to { transform: translateY(0); } }
+
+/* Responsividade para o telemóvel */
+@media (max-width: 768px) {
+    .boog-modal-content { flex-direction: column; max-height: 90vh; overflow-y: auto; }
+    .boog-modal-image { width: 100%; border-right: none; border-bottom: 1px solid var(--border-light); padding: 1rem; }
+    .boog-modal-image img { max-width: 150px; }
+    .boog-modal-text { width: 100%; padding: 1.5rem; }
+    .boog-modal-text h2 { font-size: 1.5rem; }
+}
+
+.boog-login-avatar {
+            margin-top: -80px; /* Puxa a imagem para fora do cartão */
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .boog-login-avatar img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%; /* Deixa a imagem redondinha */
+            border: 6px solid var(--surface-color); /* Borda branca grossa */
+            box-shadow: var(--shadow-heavy);
+            background-color: var(--bg-body);
+            transition: transform 0.3s ease; /* Animação suave na troca */
+        }
+
+        /* Um pequeno pulinho quando ele troca de imagem */
+        .boog-login-avatar img:active, .boog-login-avatar img.animating {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body>
 
     <div id="telaAuth">
         <div class="auth-card">
+            <div class="boog-login-avatar">
+                <img id="boogLoginImg" src="DandoOla.jpg" alt="Professor Boog">
+            </div>
+            
             <h2 id="authTitulo">Bem-vindo(a)</h2>
             <p id="authSubtitulo">Acesse seu ambiente de estudos.</p>
             <div class="auth-form">
@@ -302,6 +438,25 @@
                 <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 2rem;">Meu Caderno Digital</h1>
                 <div id="listaCaderno"></div>
             </div>
+
+            <div id="boogWelcomeModal" class="boog-modal-overlay" style="display: none;">
+    <div class="boog-modal-content">
+        <div class="boog-modal-image">
+            <img src="Boog_Martelo_CabelodeJUIZ.png" alt="Professor Boog Acenando">
+        </div>
+        <div class="boog-modal-text">
+            <h2>Olá! Eu sou o Professor Boog 🐾</h2>
+            <p>Serei o seu fiel mentor nesta jornada pelo mundo jurídico.</p>
+            <p>O meu faro está treinado para encontrar qualquer artigo de lei e a minha missão é traduzir o "juridiquês" para que você entenda de forma rápida, clara e sem pegadinhas!</p>
+            <ul>
+                <li>🔍 Pesquise por termos ou números de artigos.</li>
+                <li>💡 Leia as minhas explicações didáticas.</li>
+                <li>📚 Guarde tudo no seu Caderno Digital.</li>
+            </ul>
+            <button class="btn-boog-start" onclick="fecharBoogModal()">Vamos começar! 🚀</button>
+        </div>
+    </div>
+</div>
         </main>
     </div>
 
@@ -333,11 +488,38 @@
                 document.getElementById('telaAuth').style.display = 'none';
                 document.getElementById('telaApp').style.display = 'flex';
                 window.renderizarCaderno();
+            
+                if (!localStorage.getItem('boogApresentado')) {
+                    setTimeout(() => {
+                        document.getElementById('boogWelcomeModal').style.display = 'flex';
+                        // Grava na memória para não mostrar de novo
+                        localStorage.setItem('boogApresentado', 'true'); 
+                    }, 500); // Dá um tempinho de meio segundo após o login para aparecer
+                }
             } else {
                 usuarioLogado = null;
                 document.getElementById('telaApp').style.display = 'none';
                 document.getElementById('telaAuth').style.display = 'flex';
             }
+        });
+
+        // === ANIMAÇÃO DO BOOG NA SENHA ===
+        const senhaInputBox = document.getElementById('senhaInput');
+        const boogLoginImg = document.getElementById('boogLoginImg');
+
+        // Quando o usuário CLICA no campo de senha (esconde os olhos)
+        senhaInputBox.addEventListener('focus', () => {
+            // Adicionamos a imagem nova que você vai gerar
+            boogLoginImg.src = 'boogtapandoosolhos.jpg'; 
+            boogLoginImg.classList.add('animating');
+            setTimeout(() => boogLoginImg.classList.remove('animating'), 150);
+        });
+
+        // Quando o usuário SAI do campo de senha (volta a olhar e dar olá)
+        senhaInputBox.addEventListener('blur', () => {
+            boogLoginImg.src = 'dandoola.jpg'; 
+            boogLoginImg.classList.add('animating');
+            setTimeout(() => boogLoginImg.classList.remove('animating'), 150);
         });
 
         window.alternarModoAuth = function() {
@@ -477,6 +659,12 @@
                 document.getElementById('contadorCaderno').innerText = parseInt(document.getElementById('contadorCaderno').innerText) - 1;
             } catch (e) { alert("Erro ao excluir."); }
         };
+
+        window.fecharBoogModal = function() {
+    const modal = document.getElementById('boogWelcomeModal');
+    modal.style.opacity = '0';
+    setTimeout(() => { modal.style.display = 'none'; }, 300); // Espera a animação terminar
+};
     </script>
 </body>
 </html>
