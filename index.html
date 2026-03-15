@@ -123,6 +123,89 @@
             .container { padding: 1.5rem; }
             .card { padding: 1.5rem; }
         }
+
+        .boog-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid var(--brand-primary);
+    background-size: cover;
+    background-image: url('C:\Users\Pedro Nascimento\Documentos\PROJETOS - HTML, CSS, JS\Vade Mecum Digital\templates\fotosMascoteBoog\DandoOla.jpg'); /* Usaremos a pose 3 */
+
+    /* ESTILO DO BOOG NO LOADING */
+.boog-searching-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 2rem;
+}
+
+.boog-gif {
+    width: 180px; /* Tamanho ideal para o mascote */
+    height: auto;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.loader-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--brand-primary);
+    text-align: center;
+}
+}
+
+/* CONTAINER DO VÍDEO */
+.boog-searching-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+    width: 100%;
+}
+
+/* WRAPPER PARA DAR O EFEITO DE INTERATIVIDADE */
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 350px; /* Tamanho máximo no desktop */
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+/* O VÍDEO EM SI: RESPONSIVO */
+.boog-video {
+    width: 100%;
+    height: auto; /* Mantém a proporção sem achatar */
+    max-height: 300px;
+    border-radius: var(--radius-lg);
+    
+    /* EFEITO DE BRILHO QUE "PULSA" NO FUNDO (INTERATIVO) */
+    filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.4));
+    animation: glow-pulse 2s infinite ease-in-out;
+}
+
+/* ANIMAÇÃO DE BRILHO */
+@keyframes glow-pulse {
+    0% { filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.2)); }
+    50% { filter: drop-shadow(0 0 25px rgba(59, 130, 246, 0.6)); }
+    100% { filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.2)); }
+}
+
+/* AJUSTE PARA TELAS PEQUENAS (MOBILE) */
+@media (max-width: 600px) {
+    .video-wrapper {
+        max-width: 250px; /* Diminui um pouco para não ocupar a tela toda no celular */
+    }
+}
     </style>
 </head>
 <body>
@@ -175,13 +258,23 @@
                 </div>
 
                 <div class="container">
-                    <div id="loading">
-                        <div class="loader-text" id="textoLoading">A Inteligência Artificial está buscando o artigo...</div>
-                        <div class="skeleton-grid">
-                            <div class="skeleton-card"><div class="skel-line" style="width: 40%; height: 24px;"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line" style="width: 70%;"></div></div>
-                            <div class="skeleton-card"><div class="skel-line" style="width: 40%; height: 24px;"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line" style="width: 70%;"></div></div>
-                        </div>
-                    </div>
+                    <div id="loading" style="display: none;">
+                <div id="loading" style="display: none;">
+    <div class="boog-searching-container">
+        <div class="video-wrapper">
+            <video autoplay loop muted playsinline class="boog-video">
+                <source src="Pesquisando.....mp4" type="video/mp4">
+                Seu navegador não suporta vídeos.
+            </video>
+        </div>
+        <div class="loader-text" id="textoLoading">O Professor Boog está farejando a solução...</div>
+    </div>
+    
+    <div class="skeleton-grid">
+        <div class="skeleton-card"><div class="skel-line" style="width: 40%; height: 24px;"></div><div class="skel-line"></div><div class="skel-line"></div></div>
+        <div class="skeleton-card"><div class="skel-line" style="width: 40%; height: 24px;"></div><div class="skel-line"></div><div class="skel-line"></div></div>
+    </div>
+</div>
 
                     <div id="resultsArea" class="results-area">
                         <div class="card">
