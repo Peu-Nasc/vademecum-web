@@ -125,15 +125,16 @@
         }
 
         .boog-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 2px solid var(--brand-primary);
-    background-size: cover;
-    background-image: url('C:\Users\Pedro Nascimento\Documentos\PROJETOS - HTML, CSS, JS\Vade Mecum Digital\templates\fotosMascoteBoog\DandoOla.jpg'); /* Usaremos a pose 3 */
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--brand-primary);
+            background-size: cover;
+            background-image: url('fotosMascoteBoog/DandoOla.jpg');
+        } /* <--- ESTA CHAVETA RESOLVE TUDO! */
 
-    /* ESTILO DO BOOG NO LOADING */
-.boog-searching-container {
+        /* ESTILO DO BOOG NO LOADING */
+        .boog-searching-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -160,7 +161,7 @@
     color: var(--brand-primary);
     text-align: center;
 }
-}
+
 
 /* CONTAINER DO VÍDEO */
 .boog-searching-container {
@@ -259,7 +260,6 @@
 
                 <div class="container">
                     <div id="loading" style="display: none;">
-                <div id="loading" style="display: none;">
     <div class="boog-searching-container">
         <div class="video-wrapper">
             <video autoplay loop muted playsinline class="boog-video">
