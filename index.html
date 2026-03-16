@@ -405,6 +405,26 @@
         .boog-accordion[open] .icon-arrow {
             transform: rotate(180deg);
         }
+
+        /* ==================== AVATAR DO BOOG NA EXPLICAÇÃO ==================== */
+        .boog-explicacao-avatar {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 3px solid var(--brand-primary);
+            object-fit: cover; /* Garante que a imagem não fique esticada */
+            box-shadow: var(--shadow-subtle);
+            background-color: #f8fafc;
+        }
+        
+        .header-professor {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -498,9 +518,13 @@
                         </div>
 
                         <div class="card" style="border-top: 6px solid var(--brand-primary);">
-                            <div class="card-header">
-                                <span class="tag tag-ia">Professor IA</span>
-                                <h2>Explicação Didática</h2>
+                            <div class="header-professor">
+                                <img src="Boog_Martelo_CabelodeJUIZ.png" alt="Professor Boog Juiz" class="boog-explicacao-avatar">
+                                
+                                <div>
+                                    <span class="tag tag-ia">Professor Boog</span>
+                                    <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-top: 4px;">Explicação Didática</h2>
+                                </div>
                             </div>
                             <div id="explicacaoIA"></div>
                         </div>
@@ -530,6 +554,42 @@
                 <li>📚 Guarde tudo no seu Caderno Digital.</li>
             </ul>
             <button class="btn-boog-start" onclick="fecharBoogModal()">Vamos começar! 🚀</button>
+        </div>
+    </div>
+</div>
+
+<div id="boogTutorialBuscaModal" class="boog-modal-overlay" style="display: none;">
+    <div class="boog-modal-content">
+        <div class="boog-modal-image">
+            <img src="BoogExaminandoArtigos.png" alt="Boog Investigador">
+        </div>
+        <div class="boog-modal-text">
+            <h2>Como consultar as leis? 🔍</h2>
+            <p>Nesta área, o meu faro de investigador entra em ação!</p>
+            <ul>
+                <li>📖 <strong>1. Escolha a Lei:</strong> Selecione o código desejado no menu suspenso.</li>
+                <li>⌨️ <strong>2. Digite o Assunto:</strong> Pode ser o número exato (ex: "121") ou uma palavra (ex: "Feminicídio").</li>
+                <li>🧠 <strong>3. A Mágica:</strong> Eu busco o texto oficial e crio uma explicação super didática para você entender sem esforço!</li>
+            </ul>
+            <button class="btn-boog-start" onclick="fecharPopUp('boogTutorialBuscaModal')">Entendido, vamos lá!</button>
+        </div>
+    </div>
+</div>
+
+<div id="boogTutorialCadernoModal" class="boog-modal-overlay" style="display: none;">
+    <div class="boog-modal-content">
+        <div class="boog-modal-image">
+            <img src="BoogExplicando-2.png" alt="Boog com Resumo">
+        </div>
+        <div class="boog-modal-text">
+            <h2>Seu Caderno Digital 📚</h2>
+            <p>Aqui é o seu cofre pessoal. Você guarda os resumos mais importantes para revisar antes das provas.</p>
+            <ul>
+                <li>💾 <strong>Salvar:</strong> Após pesquisar uma lei, clique no botão verde "Salvar Resumo" para enviá-la para cá.</li>
+                <li>☁️ <strong>Nuvem:</strong> Tudo fica seguro e acessível pelo telemóvel ou computador.</li>
+                <li>🗑️ <strong>Limpeza:</strong> Já decorou o artigo? Basta excluí-lo do caderno para manter tudo organizado!</li>
+            </ul>
+            <button class="btn-boog-start" onclick="fecharPopUp('boogTutorialCadernoModal')">Perfeito!</button>
         </div>
     </div>
 </div>
@@ -708,7 +768,27 @@
             document.getElementById('sessaoCaderno').style.display = tela === 'caderno' ? 'block' : 'none';
             document.getElementById('menuBusca').classList.toggle('active', tela === 'busca');
             document.getElementById('menuCaderno').classList.toggle('active', tela === 'caderno');
-            if(tela === 'caderno') window.renderizarCaderno();
+            
+            // Lógica ao entrar no Meu Caderno
+            if(tela === 'caderno') {
+                window.renderizarCaderno();
+                
+                // Dispara o pop-up APENAS na primeira vez que o utilizador clica nesta aba
+                if (!localStorage.getItem('boogTutorialCadernoVisto')) {
+                    setTimeout(() => {
+                        document.getElementById('boogTutorialCadernoModal').style.display = 'flex';
+                        localStorage.setItem('boogTutorialCadernoVisto', 'true');
+                    }, 200); 
+                }
+            }
+            
+            // Lógica ao voltar para a Busca (Garante que ele veja o tutorial caso tenha pulado)
+            if(tela === 'busca' && !localStorage.getItem('boogTutorialBuscaVisto') && localStorage.getItem('boogApresentado')) {
+                setTimeout(() => {
+                    document.getElementById('boogTutorialBuscaModal').style.display = 'flex';
+                    localStorage.setItem('boogTutorialBuscaVisto', 'true');
+                }, 200);
+            }
         };
 
         window.renderizarCaderno = async function() {
@@ -744,11 +824,28 @@
             } catch (e) { alert("Erro ao excluir."); }
         };
 
+        // Função genérica para fechar qualquer pop-up do Boog com animação suave
+        window.fecharPopUp = function(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.opacity = '0';
+            setTimeout(() => { 
+                modal.style.display = 'none'; 
+                modal.style.opacity = '1'; // Reseta a opacidade pro futuro
+            }, 300);
+        };
+
+        // Quando fecha as boas-vindas, já abre o tutorial de busca logo de seguida (efeito cascata)
         window.fecharBoogModal = function() {
-    const modal = document.getElementById('boogWelcomeModal');
-    modal.style.opacity = '0';
-    setTimeout(() => { modal.style.display = 'none'; }, 300); // Espera a animação terminar
-};
+            const modal = document.getElementById('boogWelcomeModal');
+            modal.style.opacity = '0';
+            setTimeout(() => { 
+                modal.style.display = 'none'; 
+                if (!localStorage.getItem('boogTutorialBuscaVisto')) {
+                    document.getElementById('boogTutorialBuscaModal').style.display = 'flex';
+                    localStorage.setItem('boogTutorialBuscaVisto', 'true');
+                }
+            }, 300); 
+        };
     </script>
 </body>
 </html>
