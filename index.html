@@ -111,7 +111,8 @@
         .btn-excluir:hover { background: #ef4444; color: white; }
 
         @media (max-width: 992px) { .results-area, .skeleton-grid { grid-template-columns: 1fr; } }
-        @media (max-width: 768px) { 
+        
+       @media (max-width: 768px) { 
             #telaApp { flex-direction: column; } 
             .sidebar { width: 100%; padding: 1.5rem; flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; } 
             .sidebar-logo, .sidebar-footer { margin: 0; }
@@ -122,6 +123,14 @@
             .btn-pesquisar { padding: 16px; }
             .container { padding: 1.5rem; }
             .card { padding: 1.5rem; }
+            
+            /* --- CORREÇÃO DO BOTÃO SALVAR NO MOBILE --- */
+            .btn-salvar {
+                width: 100%; /* Ocupa toda a largura da tela */
+                justify-content: center; /* Centraliza o ícone e o texto perfeitamente */
+                margin-top: 1rem; /* Dá um respiro da explicação acima */
+                margin-bottom: 2rem; /* Impede que o botão fique colado no fundo da tela (escondido) */
+            }
         }
 
         .boog-avatar {
@@ -422,7 +431,7 @@
     <div id="telaApp" style="display: none;">
         
         <aside class="sidebar">
-            <div class="sidebar-logo">⚖️ Vade Mecum</div>
+            <div class="sidebar-logo">⚖️ Vade Mecum DIGITAL</div>
             <ul class="sidebar-menu">
                 <li id="menuBusca" class="active" onclick="navegarMenu('busca')">🔍 Consultar Leis</li>
                 <li id="menuCaderno" onclick="navegarMenu('caderno')">📚 Meu Caderno <span class="badge" id="contadorCaderno">0</span></li>
@@ -496,7 +505,7 @@
                             <div id="explicacaoIA"></div>
                         </div>
                         
-                        <button class="btn-salvar" onclick="salvarNoCaderno()">💾 Salvar Resumo no Caderno</button>
+                        <button class="btn-salvar" onclick="salvarNoCaderno()">Salvar Resumo no Caderno</button>
                     </div>
                 </div>
             </div>
