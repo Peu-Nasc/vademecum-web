@@ -592,7 +592,15 @@
                         tituloBusca = `${searchInput} (Artigo ${dados.artigo_identificado})`;
                     }
 
-                    document.getElementById('leiSeca').innerHTML = '<p>' + dados.lei_seca.replace(/\n/g, '<br>') + '</p>';
+                    // --- LIMPEZA E FORMATAÇÃO VISUAL DA LEI SECA ---
+                    let leiFormatada = dados.lei_seca
+                        .replace(/[ \t]+/g, ' ')       // Transforma espaços/tabs gigantes em apenas 1 espaço normal
+                        .replace(/\n\s*\n/g, '\n\n')   // Transforma 3 ou mais linhas vazias em apenas 1 quebra de parágrafo
+                        .trim();
+
+                    // Aplica a formatação com alinhamento justificado e espaçamento elegante
+                    document.getElementById('leiSeca').innerHTML = '<div style="white-space: pre-wrap; text-align: justify; line-height: 1.7; padding: 10px;">' + leiFormatada + '</div>';
+                    // -----------------------------------------------
                     document.getElementById('explicacaoIA').innerHTML = marked.parse(dados.explicacao_ia);
 
                     pesquisaAtual = { lei: nomeLei, termo: tituloBusca, leiSeca: dados.lei_seca, explicacaoIA: dados.explicacao_ia };
