@@ -339,6 +339,63 @@
         .boog-login-avatar img:active, .boog-login-avatar img.animating {
             transform: scale(0.95);
         }
+
+        /* ==================== ACORDEÃO DO TEXTO DA LEI ==================== */
+        /* ==================== ACORDEÃO DO TEXTO DA LEI ==================== */
+        .boog-accordion summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            list-style: none; 
+            outline: none;
+            padding: 0.5rem 0; /* Aumenta a área clicável sem deformar o cartão */
+        }
+        
+        .boog-accordion summary::-webkit-details-marker {
+            display: none; 
+        }
+        
+        /* O Novo Botão Profissional */
+        .accordion-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            color: var(--brand-primary);
+            font-size: 1.05rem; /* Letra maior */
+            background: #eff6ff;
+            padding: 10px 24px; /* Botão mais gordinho e comprido */
+            border-radius: 12px; /* Cantos arredondados estilo Apple */
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .icon-arrow {
+            font-size: 0.85rem;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        /* Efeito Premium ao passar o mouse */
+        .boog-accordion summary:hover .accordion-btn {
+            background: var(--brand-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Estado Aberto (Fica cinza e discreto) */
+        .boog-accordion[open] .accordion-btn {
+            background: #f1f5f9;
+            color: var(--text-muted);
+            border-color: #e2e8f0;
+            box-shadow: none;
+        }
+        
+        /* Gira apenas a setinha quando aberto */
+        .boog-accordion[open] .icon-arrow {
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 <body>
@@ -416,12 +473,19 @@
 </div>
 
                     <div id="resultsArea" class="results-area">
-                        <div class="card">
-                            <div class="card-header">
-                                <span class="tag tag-oficial">Oficial</span>
-                                <h2>Texto da Lei</h2>
-                            </div>
-                            <div id="leiSeca"></div>
+                        <div class="card" style="padding: 1.5rem 2rem; align-self: start;">
+                            <details class="boog-accordion">
+                                <summary>
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span class="tag tag-oficial">Oficial</span>
+                                        <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0;">Texto da Lei</h2>
+                                    </div>
+                                    <div class="accordion-btn">
+                                        Ler Texto <span class="icon-arrow">▼</span>
+                                    </div>
+                                </summary>
+                                <div id="leiSeca" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid #f1f5f9;"></div>
+                            </details>
                         </div>
 
                         <div class="card" style="border-top: 6px solid var(--brand-primary);">
