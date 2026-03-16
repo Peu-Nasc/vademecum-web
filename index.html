@@ -109,14 +109,70 @@
         .item-caderno h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; display: flex; justify-content: space-between; }
         .btn-excluir { background: #fee2e2; color: #ef4444; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .btn-excluir:hover { background: #ef4444; color: white; }
+        /* ==================== CONFIGURAÇÃO DO MENU MOBILE ==================== */
+        .mobile-header, .menu-overlay { display: none; }
 
         @media (max-width: 992px) { .results-area, .skeleton-grid { grid-template-columns: 1fr; } }
         
        @media (max-width: 768px) { 
             #telaApp { flex-direction: column; } 
-            .sidebar { width: 100%; padding: 1.5rem; flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; } 
-            .sidebar-logo, .sidebar-footer { margin: 0; }
-            .sidebar-menu { flex-direction: row; width: 100%; margin-top: 1rem; }
+            
+            /* Mostra o cabeçalho no telemóvel */
+            .mobile-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1.2rem 1.5rem;
+                background: var(--bg-sidebar);
+                color: white;
+                width: 100%;
+                z-index: 900;
+            }
+            .btn-menu-mobile {
+                background: transparent;
+                border: none;
+                color: white;
+                font-size: 1.8rem;
+                cursor: pointer;
+            }
+
+            .desktop-logo { display: none; } /* Esconde a logo duplicada no menu lateral */
+
+            /* O Fundo Escuro (Sombra) */
+            .menu-overlay {
+                display: block;
+                position: fixed;
+                top: 0; left: 0; width: 100vw; height: 100vh;
+                background: rgba(2, 6, 23, 0.6);
+                z-index: 998;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease;
+            }
+            .menu-overlay.ativa {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            /* A Barra Lateral Deslizante (Gaveta) */
+            .sidebar { 
+                position: fixed;
+                top: 0;
+                left: -300px; /* Escondida fora do ecrã à esquerda */
+                width: 280px;
+                height: 100vh;
+                z-index: 999;
+                padding: 2rem 1.5rem;
+                flex-direction: column;
+                justify-content: flex-start;
+                transition: left 0.3s ease; /* Animação de deslize */
+            }
+            .sidebar.aberta {
+                left: 0; /* Desliza para dentro do ecrã */
+            }
+            .sidebar-menu { flex-direction: column; width: 100%; margin-top: 1rem; }
+            .btn-sair-sidebar { margin-top: auto; }
+            
             .hero-section { padding: 3rem 1.5rem; }
             .search-container { flex-direction: column; background: transparent; box-shadow: none; border: none; padding: 0; }
             .search-container select, .search-container input { padding: 16px; border: 1px solid var(--border-light); background: white; }
@@ -450,8 +506,15 @@
 
     <div id="telaApp" style="display: none;">
         
-        <aside class="sidebar">
-            <div class="sidebar-logo">⚖️ Vade Mecum DIGITAL</div>
+        <div class="mobile-header">
+            <div class="sidebar-logo" style="margin: 0;">⚖️ Vade Mecum DIGITAL</div>
+            <button class="btn-menu-mobile" onclick="toggleMenuMobile()">☰</button>
+        </div>
+
+        <div class="menu-overlay" id="menuOverlay" onclick="toggleMenuMobile()"></div>
+        
+        <aside class="sidebar" id="sidebarMenu">
+            <div class="sidebar-logo desktop-logo">⚖️ Vade Mecum DIGITAL</div>
             <ul class="sidebar-menu">
                 <li id="menuBusca" class="active" onclick="navegarMenu('busca')">🔍 Consultar Leis</li>
                 <li id="menuCaderno" onclick="navegarMenu('caderno')">📚 Meu Caderno <span class="badge" id="contadorCaderno">0</span></li>
@@ -474,9 +537,7 @@
                             <option value="cp">Código Penal</option>
                             <option value="cc">Código Civil</option>
                             <option value="cdc">Defesa do Consumidor</option>
-                            <option value="lmp">Lei Maria da Penha</option>
-                            <option value="eca">Estatuto da Criança (ECA)</option>
-                            <option value="clt">Leis do Trabalho (CLT)</option>
+                            <option value="especiais">Leis Especiais (M. Penha, ECA, CLT...)</option>
                         </select>
                         <input type="text" id="searchInput" placeholder="Ex: Artigo 121 ou Feminicídio...">
                         <button class="btn-pesquisar" onclick="realizarPesquisa()">Pesquisar</button>
@@ -507,7 +568,7 @@
                                 <summary>
                                     <div style="display: flex; align-items: center; gap: 12px;">
                                         <span class="tag tag-oficial">Oficial</span>
-                                        <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0;">Texto da Lei</h2>
+                                        <h2 id="tituloLeiOficial" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0;">Texto da Lei</h2>
                                     </div>
                                     <div class="accordion-btn">
                                         Ler Texto <span class="icon-arrow">▼</span>
@@ -597,6 +658,11 @@
     </div>
 
     <script type="module">
+        // Abre e fecha o menu no telemóvel
+        window.toggleMenuMobile = function() {
+            document.getElementById('sidebarMenu').classList.toggle('aberta');
+            document.getElementById('menuOverlay').classList.toggle('ativa');
+        };
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -719,24 +785,22 @@
                 const dados = await resposta.json();
 
                 if (dados.sucesso) {
-                    // Opcional: Mostra o número real do artigo descoberto se foi busca por palavra
                     let tituloBusca = searchInput;
                     if(dados.artigo_identificado) {
-                        tituloBusca = `${searchInput} (Artigo ${dados.artigo_identificado})`;
+                        tituloBusca = `${searchInput} (Art. ${dados.artigo_identificado})`;
                     }
 
-                    // --- LIMPEZA E FORMATAÇÃO VISUAL DA LEI SECA ---
-                    let leiFormatada = dados.lei_seca
-                        .replace(/[ \t]+/g, ' ')       // Transforma espaços/tabs gigantes em apenas 1 espaço normal
-                        .replace(/\n\s*\n/g, '\n\n')   // Transforma 3 ou mais linhas vazias em apenas 1 quebra de parágrafo
-                        .trim();
+                    // A MAGIA: O Professor Boog atualiza o título do ecrã se tiver corrigido a lei para você!
+                    const leiFinal = dados.nome_lei_corrigido || nomeLei;
+                    document.getElementById('tituloLeiOficial').innerText = leiFinal;
 
-                    // Aplica a formatação com alinhamento justificado e espaçamento elegante
+                    // O seu regex limpinho de formatação do texto da lei
+                    let leiFormatada = dados.lei_seca.replace(/[ \t]+/g, ' ').replace(/\n\s*\n/g, '\n\n').trim();
                     document.getElementById('leiSeca').innerHTML = '<div style="white-space: pre-wrap; text-align: justify; line-height: 1.7; padding: 10px;">' + leiFormatada + '</div>';
-                    // -----------------------------------------------
+                    
                     document.getElementById('explicacaoIA').innerHTML = marked.parse(dados.explicacao_ia);
 
-                    pesquisaAtual = { lei: nomeLei, termo: tituloBusca, leiSeca: dados.lei_seca, explicacaoIA: dados.explicacao_ia };
+                    pesquisaAtual = { lei: leiFinal, termo: tituloBusca, leiSeca: dados.lei_seca, explicacaoIA: dados.explicacao_ia };
 
                     loading.style.display = 'none';
                     resultsArea.style.display = 'grid';
@@ -764,6 +828,10 @@
         };
 
         window.navegarMenu = function(tela) {
+            const sidebar = document.getElementById('sidebarMenu');
+            if(sidebar && sidebar.classList.contains('aberta')) {
+                window.toggleMenuMobile();
+            }
             document.getElementById('sessaoBusca').style.display = tela === 'busca' ? 'block' : 'none';
             document.getElementById('sessaoCaderno').style.display = tela === 'caderno' ? 'block' : 'none';
             document.getElementById('menuBusca').classList.toggle('active', tela === 'busca');
