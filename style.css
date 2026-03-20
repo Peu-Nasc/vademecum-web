@@ -1,0 +1,471 @@
+
+        /* ==================== PALETA DE CORES STARTUP PREMIUM ==================== */
+        :root {
+            --bg-body: #f1f5f9;
+            --bg-sidebar: #020617;
+            --bg-sidebar-hover: #1e293b;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --brand-primary: #3b82f6;
+            --brand-hover: #2563eb;
+            --border-light: #e2e8f0;
+            --shadow-subtle: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-heavy: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-xl: 20px;
+            --radius-md: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); -webkit-font-smoothing: antialiased; overflow: hidden; }
+
+        /* ==================== TELA DE LOGIN ==================== */
+        #telaAuth { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #020617 0%, #1e293b 100%); }
+        .auth-card { background: var(--surface-color); padding: 3.5rem; border-radius: var(--radius-xl); box-shadow: var(--shadow-heavy); width: 100%; max-width: 440px; text-align: center; }
+        .auth-card h2 { font-weight: 800; font-size: 2.2rem; color: #020617; letter-spacing: -1px; margin-bottom: 0.5rem; }
+        .auth-card p { color: var(--text-muted); margin-bottom: 2.5rem; }
+        .auth-form { display: flex; flex-direction: column; gap: 16px; }
+        .auth-form input { padding: 16px 20px; border: 1.5px solid var(--border-light); border-radius: var(--radius-md); font-size: 1rem; transition: 0.2s; background: #f8fafc; }
+        .auth-form input:focus { border-color: var(--brand-primary); background: #fff; outline: none; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+        .auth-btn { background: var(--brand-primary); color: white; padding: 16px; border: none; border-radius: var(--radius-md); font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .auth-btn:hover { background: var(--brand-hover); transform: translateY(-2px); }
+        .auth-toggle { margin-top: 24px; color: var(--text-muted); font-size: 0.95rem; }
+        .auth-toggle span { color: var(--brand-primary); font-weight: 600; cursor: pointer; }
+
+        /* ==================== DASHBOARD (SIDEBAR + MAIN) ==================== */
+        #telaApp { display: none; height: 100vh; width: 100vw; display: flex; } /* Controlado pelo JS */
+        
+        .sidebar { width: 260px; background: var(--bg-sidebar); padding: 2rem 1.5rem; display: flex; flex-direction: column; color: #fff; }
+        .sidebar-logo { font-size: 1.4rem; font-weight: 800; margin-bottom: 3rem; display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px; }
+        .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .sidebar-menu li { padding: 14px 16px; border-radius: 10px; cursor: pointer; transition: 0.2s; font-weight: 500; color: #94a3b8; display: flex; align-items: center; justify-content: space-between; }
+        .sidebar-menu li:hover { background: var(--bg-sidebar-hover); color: #fff; }
+        .sidebar-menu li.active { background: rgba(59, 130, 246, 0.15); color: #60a5fa; font-weight: 600; }
+        .badge { background: var(--brand-primary); color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.8rem; }
+        .btn-sair-sidebar { margin-top: auto; width: 100%; background: transparent; color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-sair-sidebar:hover { background: #ef4444; color: white; }
+
+        .main-content { flex: 1; background: var(--bg-body); overflow-y: auto; position: relative; scroll-behavior: smooth; }
+        
+        /* ==================== ÁREA DE BUSCA (HERO SECTION) ==================== */
+        .hero-section { background: var(--surface-color); padding: 4rem 3rem; border-bottom: 1px solid var(--border-light); text-align: center; }
+        .hero-section h1 { font-size: 2.5rem; font-weight: 800; color: var(--text-main); letter-spacing: -1px; margin-bottom: 0.5rem; }
+        .hero-section p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 2.5rem auto; }
+        
+        .search-container { max-width: 800px; margin: 0 auto; display: flex; gap: 10px; background: white; padding: 8px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-heavy); }
+        .search-container select { border: none; background: #f8fafc; padding: 0 20px; border-radius: 10px; font-weight: 600; color: var(--text-main); cursor: pointer; outline: none; }
+        .search-container input { flex: 1; border: none; padding: 20px; font-size: 1.1rem; outline: none; border-radius: 10px; }
+        .btn-pesquisar { background: var(--text-main); color: white; border: none; padding: 0 40px; border-radius: 10px; font-weight: 600; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
+        .btn-pesquisar:hover { background: var(--brand-primary); }
+
+        /* ==================== ÁREA DE RESULTADOS ==================== */
+        .container { max-width: 1200px; margin: 0 auto; padding: 3rem; }
+        
+        /* SKELETON LOADING */
+        #loading { display: none; text-align: center; margin-top: 1rem; }
+        .loader-text { font-size: 1.2rem; font-weight: 600; color: var(--brand-primary); animation: pulse 1.5s infinite; margin-bottom: 2rem;}
+        .skeleton-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .skeleton-card { background: var(--surface-color); padding: 3rem; border-radius: var(--radius-xl); border: 1px solid var(--border-light); }
+        .skel-line { height: 16px; background: #e2e8f0; border-radius: 8px; margin-bottom: 12px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* CARDS REAIS */
+        .results-area { display: none; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .card { background: var(--surface-color); padding: 3rem; border-radius: var(--radius-xl); box-shadow: var(--shadow-subtle); border: 1px solid var(--border-light); }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 2rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1rem; }
+        .card h2 { font-size: 1.5rem; font-weight: 800; color: var(--text-main); }
+        .tag { padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .tag-oficial { background: #f1f5f9; color: #475569; }
+        .tag-ia { background: #eff6ff; color: var(--brand-primary); }
+        
+        /* FORMATANDO A EXPLICAÇÃO DA IA (MARKDOWN) */
+        #leiSeca { color: #334155; font-size: 1.1rem; line-height: 1.8; }
+        #explicacaoIA { color: #334155; font-size: 1.1rem; line-height: 1.8; }
+        #explicacaoIA h3 { color: var(--text-main); margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; font-weight: 800; }
+        #explicacaoIA h3:first-child { margin-top: 0; }
+        #explicacaoIA p { margin-bottom: 1rem; }
+        #explicacaoIA ul { margin-bottom: 1.5rem; padding-left: 1.5rem; }
+        #explicacaoIA li { margin-bottom: 0.5rem; }
+        #explicacaoIA strong { color: var(--text-main); background: #f1f5f9; padding: 2px 6px; border-radius: 6px; }
+
+        .btn-salvar { grid-column: 1 / -1; background: #10b981; color: white; border: none; padding: 16px 32px; border-radius: var(--radius-md); font-weight: 600; font-size: 1.1rem; cursor: pointer; transition: 0.2s; justify-self: center; display: inline-flex; align-items: center; gap: 8px; box-shadow: var(--shadow-subtle); }
+        .btn-salvar:hover { background: #059669; transform: translateY(-2px); }
+
+        /* ITEM DO CADERNO */
+        #sessaoCaderno { display: none; }
+        .item-caderno { background: var(--surface-color); padding: 2.5rem; border-radius: var(--radius-xl); box-shadow: var(--shadow-subtle); margin-bottom: 1.5rem; border: 1px solid var(--border-light); border-left: 8px solid #10b981; }
+        .item-caderno h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; display: flex; justify-content: space-between; }
+        .btn-excluir { background: #fee2e2; color: #ef4444; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-excluir:hover { background: #ef4444; color: white; }
+        /* ==================== CONFIGURAÇÃO DO MENU MOBILE ==================== */
+        .mobile-header, .menu-overlay { display: none; }
+
+        @media (max-width: 992px) { .results-area, .skeleton-grid { grid-template-columns: 1fr; } }
+        
+       @media (max-width: 768px) { 
+            #telaApp { flex-direction: column; } 
+            
+            /* Mostra o cabeçalho no telemóvel */
+            .mobile-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1.2rem 1.5rem;
+                background: var(--bg-sidebar);
+                color: white;
+                width: 100%;
+                z-index: 900;
+            }
+            .btn-menu-mobile {
+                background: transparent;
+                border: none;
+                color: white;
+                font-size: 1.8rem;
+                cursor: pointer;
+            }
+
+            .desktop-logo { display: none; } /* Esconde a logo duplicada no menu lateral */
+
+            /* O Fundo Escuro (Sombra) */
+            .menu-overlay {
+                display: block;
+                position: fixed;
+                top: 0; left: 0; width: 100vw; height: 100vh;
+                background: rgba(2, 6, 23, 0.6);
+                z-index: 998;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease;
+            }
+            .menu-overlay.ativa {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            /* A Barra Lateral Deslizante (Gaveta) */
+            .sidebar { 
+                position: fixed;
+                top: 0;
+                left: -300px; /* Escondida fora do ecrã à esquerda */
+                width: 280px;
+                height: 100vh;
+                z-index: 999;
+                padding: 2rem 1.5rem;
+                flex-direction: column;
+                justify-content: flex-start;
+                transition: left 0.3s ease; /* Animação de deslize */
+            }
+            .sidebar.aberta {
+                left: 0; /* Desliza para dentro do ecrã */
+            }
+            .sidebar-menu { flex-direction: column; width: 100%; margin-top: 1rem; }
+            .btn-sair-sidebar { margin-top: auto; }
+            
+            .hero-section { padding: 3rem 1.5rem; }
+            .search-container { flex-direction: column; background: transparent; box-shadow: none; border: none; padding: 0; }
+            .search-container select, .search-container input { padding: 16px; border: 1px solid var(--border-light); background: white; }
+            .btn-pesquisar { padding: 16px; }
+            .container { padding: 1.5rem; }
+            .card { padding: 1.5rem; }
+            
+            /* --- CORREÇÃO DO BOTÃO SALVAR NO MOBILE --- */
+            .btn-salvar {
+                width: 100%; /* Ocupa toda a largura da tela */
+                justify-content: center; /* Centraliza o ícone e o texto perfeitamente */
+                margin-top: 1rem; /* Dá um respiro da explicação acima */
+                margin-bottom: 2rem; /* Impede que o botão fique colado no fundo da tela (escondido) */
+            }
+        }
+
+        .boog-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--brand-primary);
+            background-size: cover;
+            background-image: url('fotosMascoteBoog/DandoOla.jpg');
+        } /* <--- ESTA CHAVETA RESOLVE TUDO! */
+
+        /* ESTILO DO BOOG NO LOADING */
+        .boog-searching-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 2rem;
+}
+
+.boog-gif {
+    width: 180px; /* Tamanho ideal para o mascote */
+    height: auto;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.loader-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--brand-primary);
+    text-align: center;
+}
+
+
+/* CONTAINER DO VÍDEO */
+.boog-searching-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+    width: 100%;
+}
+
+/* WRAPPER PARA DAR O EFEITO DE INTERATIVIDADE */
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 350px; /* Tamanho máximo no desktop */
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+/* O VÍDEO EM SI: RESPONSIVO */
+.boog-video {
+    width: 100%;
+    height: auto; /* Mantém a proporção sem achatar */
+    max-height: 300px;
+    border-radius: var(--radius-lg);
+    
+    /* EFEITO DE BRILHO QUE "PULSA" NO FUNDO (INTERATIVO) */
+    filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.4));
+    animation: glow-pulse 2s infinite ease-in-out;
+}
+
+/* ANIMAÇÃO DE BRILHO */
+@keyframes glow-pulse {
+    0% { filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.2)); }
+    50% { filter: drop-shadow(0 0 25px rgba(59, 130, 246, 0.6)); }
+    100% { filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.2)); }
+}
+
+/* AJUSTE PARA TELAS PEQUENAS (MOBILE) */
+@media (max-width: 600px) {
+    .video-wrapper {
+        max-width: 250px; /* Diminui um pouco para não ocupar a tela toda no celular */
+    }
+}
+
+/* ==================== POP-UP DO PROFESSOR BOOG ==================== */
+.boog-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(2, 6, 23, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    animation: fadeIn 0.4s forwards ease-out;
+}
+
+.boog-modal-content {
+    background: var(--surface-color);
+    width: 90%;
+    max-width: 750px;
+    border-radius: var(--radius-xl);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    display: flex;
+    overflow: hidden;
+    transform: translateY(30px);
+    animation: slideUp 0.5s forwards ease-out;
+    border: 2px solid var(--brand-primary);
+}
+
+.boog-modal-image {
+    background: #f8fafc;
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    border-right: 1px solid var(--border-light);
+}
+
+.boog-modal-image img {
+    width: 100%;
+    max-width: 250px;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+}
+
+.boog-modal-text {
+    padding: 3rem;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.boog-modal-text h2 {
+    font-size: 1.8rem;
+    color: var(--text-main);
+    margin-bottom: 1rem;
+    font-weight: 800;
+}
+
+.boog-modal-text p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.boog-modal-text ul {
+    list-style: none;
+    margin-bottom: 2rem;
+}
+
+.boog-modal-text li {
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-boog-start {
+    background: var(--brand-primary);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: 0.2s;
+    width: 100%;
+}
+
+.btn-boog-start:hover {
+    background: var(--brand-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+}
+
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes slideUp { to { transform: translateY(0); } }
+
+/* Responsividade para o telemóvel */
+@media (max-width: 768px) {
+    .boog-modal-content { flex-direction: column; max-height: 90vh; overflow-y: auto; }
+    .boog-modal-image { width: 100%; border-right: none; border-bottom: 1px solid var(--border-light); padding: 1rem; }
+    .boog-modal-image img { max-width: 150px; }
+    .boog-modal-text { width: 100%; padding: 1.5rem; }
+    .boog-modal-text h2 { font-size: 1.5rem; }
+}
+
+.boog-login-avatar {
+            margin-top: -80px; /* Puxa a imagem para fora do cartão */
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .boog-login-avatar img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%; /* Deixa a imagem redondinha */
+            border: 6px solid var(--surface-color); /* Borda branca grossa */
+            box-shadow: var(--shadow-heavy);
+            background-color: var(--bg-body);
+            transition: transform 0.3s ease; /* Animação suave na troca */
+        }
+
+        /* Um pequeno pulinho quando ele troca de imagem */
+        .boog-login-avatar img:active, .boog-login-avatar img.animating {
+            transform: scale(0.95);
+        }
+
+        /* ==================== ACORDEÃO DO TEXTO DA LEI ==================== */
+        /* ==================== ACORDEÃO DO TEXTO DA LEI ==================== */
+        .boog-accordion summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            list-style: none; 
+            outline: none;
+            padding: 0.5rem 0; /* Aumenta a área clicável sem deformar o cartão */
+        }
+        
+        .boog-accordion summary::-webkit-details-marker {
+            display: none; 
+        }
+        
+        /* O Novo Botão Profissional */
+        .accordion-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            color: var(--brand-primary);
+            font-size: 1.05rem; /* Letra maior */
+            background: #eff6ff;
+            padding: 10px 24px; /* Botão mais gordinho e comprido */
+            border-radius: 12px; /* Cantos arredondados estilo Apple */
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .icon-arrow {
+            font-size: 0.85rem;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        /* Efeito Premium ao passar o mouse */
+        .boog-accordion summary:hover .accordion-btn {
+            background: var(--brand-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Estado Aberto (Fica cinza e discreto) */
+        .boog-accordion[open] .accordion-btn {
+            background: #f1f5f9;
+            color: var(--text-muted);
+            border-color: #e2e8f0;
+            box-shadow: none;
+        }
+        
+        /* Gira apenas a setinha quando aberto */
+        .boog-accordion[open] .icon-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* ==================== AVATAR DO BOOG NA EXPLICAÇÃO ==================== */
+        .boog-explicacao-avatar {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 3px solid var(--brand-primary);
+            object-fit: cover; /* Garante que a imagem não fique esticada */
+            box-shadow: var(--shadow-subtle);
+            background-color: #f8fafc;
+        }
+        
+        .header-professor {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 1rem;
+        }
