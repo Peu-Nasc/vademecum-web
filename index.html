@@ -790,9 +790,13 @@
                         tituloBusca = `${searchInput} (Art. ${dados.artigo_identificado})`;
                     }
 
-                    // A MAGIA: O Professor Boog atualiza o título do ecrã se tiver corrigido a lei para você!
+                    // A MAGIA: O Professor Boog atualiza o título do ecrã e MUDA O MENU sozinho!
                     const leiFinal = dados.nome_lei_corrigido || nomeLei;
                     document.getElementById('tituloLeiOficial').innerText = leiFinal;
+                    
+                    if(dados.menu_correto) {
+                        document.getElementById('lawSelect').value = dados.menu_correto;
+                    }
 
                     // O seu regex limpinho de formatação do texto da lei
                     let leiFormatada = dados.lei_seca.replace(/[ \t]+/g, ' ').replace(/\n\s*\n/g, '\n\n').trim();
