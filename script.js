@@ -6,7 +6,8 @@ window.toggleMenuMobile = function() {
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+// IMPORT CORRIGIDO COM O getDoc INCLUÍDO:
+import { getFirestore, collection, addDoc, getDocs, getDoc, deleteDoc, doc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyA42NDFJyf6dVGjKNVQGIypxQw-PMhc1ec",
@@ -35,7 +36,6 @@ onAuthStateChanged(auth, (user) => {
         if (!localStorage.getItem('boogApresentado')) {
             setTimeout(() => {
                 document.getElementById('boogWelcomeModal').style.display = 'flex';
-                // Grava na memória para não mostrar de novo
                 localStorage.setItem('boogApresentado', 'true'); 
             }, 500); 
         }
@@ -121,7 +121,7 @@ window.realizarPesquisa = async function() {
     const nomeLei = lawSelect.options[lawSelect.selectedIndex].text;
     const siglaLei = lawSelect.value;
     
-    // NOVO: Captura a banca selecionada
+    // Captura a banca selecionada
     const bancaEscolhida = document.getElementById('selectBanca').value;
     
     const resultsArea = document.getElementById('resultsArea');
@@ -143,7 +143,7 @@ window.realizarPesquisa = async function() {
             body: JSON.stringify({ 
                 termo: searchInput, 
                 lei: siglaLei,
-                banca: bancaEscolhida // Enviando o foco pro Python
+                banca: bancaEscolhida
             })
         });
 
@@ -167,7 +167,6 @@ window.realizarPesquisa = async function() {
             
             document.getElementById('explicacaoIA').innerHTML = marked.parse(dados.explicacao_ia);
 
-            // NOVO: Adiciona a banca na pesquisaAtual para ir para o Caderno
             pesquisaAtual = { 
                 lei: leiFinal, 
                 termo: tituloBusca, 
@@ -198,7 +197,7 @@ window.salvarNoCaderno = async function() {
             termo: pesquisaAtual.termo,
             leiSeca: pesquisaAtual.leiSeca, 
             explicacaoIA: pesquisaAtual.explicacaoIA,
-            banca: pesquisaAtual.banca, // Salvando o foco da banca
+            banca: pesquisaAtual.banca,
             dataSalvamento: new Date()
         });
         alert('Salvo no Caderno Digital!');
@@ -247,15 +246,19 @@ window.renderizarCaderno = async function() {
         querySnapshot.forEach((docSnap) => {
             const item = docSnap.data();
             
-            // Adiciona a "Tag da Banca" se ela existir no Firebase
             const tagBanca = item.banca ? `<span class="tag tag-ia" style="margin-left: 10px; font-size: 0.7rem;">${item.banca}</span>` : '';
 
             listaCaderno.innerHTML += `
                 <div class="item-caderno" id="doc-${docSnap.id}">
-                    <h3>
-                        <span>${item.lei} - ${item.termo} ${tagBanca}</span>
-                        <button class="btn-excluir" onclick="removerDoCaderno('${docSnap.id}')">Excluir</button>
-                    </h3>
+                        <h3>
+                            <span style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+                                ${item.lei} - ${item.termo} ${tagBanca}
+                            </span>
+                            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                                <button style="background: var(--brand-primary); color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem;" onclick="iniciarTreino('${docSnap.id}')">🧠 Treinar</button>
+                                <button class="btn-excluir" onclick="removerDoCaderno('${docSnap.id}')">Excluir</button>
+                            </div>
+                        </h3>
                     <details style="margin: 15px 0; cursor: pointer; color: var(--brand-primary); font-weight: 600;">
                         <summary>Ler Lei Original</summary>
                         <div style="margin-top: 10px; padding: 15px; background: #f8fafc; border-radius: 8px; color: #475569; font-weight: 400;">${item.leiSeca.replace(/\n/g, '<br>')}</div>
@@ -293,4 +296,116 @@ window.fecharBoogModal = function() {
             localStorage.setItem('boogTutorialBuscaVisto', 'true');
         }
     }, 300); 
+};
+
+// ==================== LÓGICA DO TREINAMENTO BOOG ====================
+let flashcardsAtuais = [];
+let perguntaAtualIndex = 0;
+
+window.iniciarTreino = async function(docId) {
+    document.getElementById('boogTreinoModal').style.display = 'flex';
+    document.getElementById('areaTreinoConteudo').style.display = 'none';
+    document.getElementById('treinoStatus').innerText = "O Professor Boog está a preparar a sua prova... 🐶⌛";
+    
+    try {
+        const docRef = doc(db, "cadernos", docId);
+        const docSnap = await getDoc(docRef);
+        const item = docSnap.data();
+
+        const resposta = await fetch('https://vademecum-api.onrender.com/api/treino', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                termo: item.termo, 
+                lei_seca: item.leiSeca,
+                banca: item.banca || 'Concurso Público'
+            })
+        });
+
+        const dados = await resposta.json();
+
+        if(dados.sucesso && dados.flashcards.length > 0) {
+            flashcardsAtuais = dados.flashcards;
+            perguntaAtualIndex = 0;
+            renderizarPergunta();
+        } else {
+            alert("Erro ao gerar o treino. O servidor pode estar ocupado.");
+            fecharPopUp('boogTreinoModal');
+        }
+    } catch (e) {
+        console.error(e);
+        alert("Falha de conexão com a API.");
+        fecharPopUp('boogTreinoModal');
+    }
+};
+
+window.renderizarPergunta = function() {
+    document.getElementById('areaTreinoConteudo').style.display = 'block';
+    document.getElementById('feedbackTreino').style.display = 'none';
+    document.getElementById('treinoStatus').innerText = `Pergunta ${perguntaAtualIndex + 1} de ${flashcardsAtuais.length}`;
+    
+    const card = flashcardsAtuais[perguntaAtualIndex];
+    document.getElementById('perguntaTexto').innerText = card.pergunta;
+    
+    const opcoesContainer = document.getElementById('opcoesContainer');
+    opcoesContainer.innerHTML = '';
+    
+    card.opcoes.forEach((opcao, index) => {
+        const btn = document.createElement('button');
+        btn.innerText = opcao;
+        btn.style.cssText = "text-align: left; padding: 14px; border: 2px solid var(--border-light); border-radius: 10px; background: var(--surface-color); color: var(--text-main); font-weight: 500; font-size: 1rem; cursor: pointer; transition: 0.2s;";
+        
+        btn.onmouseover = () => { if(!btn.disabled) btn.style.borderColor = "var(--brand-primary)"; };
+        btn.onmouseout = () => { if(!btn.disabled) btn.style.borderColor = "var(--border-light)"; };
+        
+        btn.onclick = () => verificarResposta(index, btn, card);
+        opcoesContainer.appendChild(btn);
+    });
+};
+
+window.verificarResposta = function(indexSelecionado, btnClicado, card) {
+    const botoes = document.getElementById('opcoesContainer').children;
+    for(let b of botoes) { b.disabled = true; b.style.opacity = '0.6'; b.style.cursor = 'default'; }
+    
+    const feedback = document.getElementById('feedbackTreino');
+    const explicacaoTexto = document.getElementById('explicacaoBoogTexto');
+    
+    btnClicado.style.opacity = '1';
+    feedback.style.display = 'block';
+
+    if(indexSelecionado === card.correta) {
+        btnClicado.style.borderColor = '#10b981';
+        btnClicado.style.backgroundColor = '#ecfdf5';
+        feedback.style.backgroundColor = '#ecfdf5';
+        feedback.style.color = '#047857';
+        explicacaoTexto.innerHTML = `<strong>✅ Au au! Acertou em cheio!</strong><br><br>${card.explicacao_boog}`;
+    } else {
+        btnClicado.style.borderColor = '#ef4444';
+        btnClicado.style.backgroundColor = '#fef2f2';
+        botoes[card.correta].style.opacity = '1';
+        botoes[card.correta].style.borderColor = '#10b981';
+        botoes[card.correta].style.backgroundColor = '#ecfdf5';
+        
+        feedback.style.backgroundColor = '#fef2f2';
+        feedback.style.color = '#b91c1c';
+        explicacaoTexto.innerHTML = `<strong>❌ Errado! Mas não desanime, veja a resposta:</strong><br><br>${card.explicacao_boog}`;
+    }
+    
+    const btnProx = document.getElementById('btnProximaPergunta');
+    if(perguntaAtualIndex === flashcardsAtuais.length - 1) {
+        btnProx.innerText = "Finalizar Treino 🏆";
+        btnProx.style.background = "#10b981"; 
+    } else {
+        btnProx.innerText = "Próxima Pergunta ➔";
+        btnProx.style.background = "var(--brand-primary)";
+    }
+};
+
+window.proximaPergunta = function() {
+    if(perguntaAtualIndex < flashcardsAtuais.length - 1) {
+        perguntaAtualIndex++;
+        renderizarPergunta();
+    } else {
+        fecharPopUp('boogTreinoModal');
+    }
 };
